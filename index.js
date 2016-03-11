@@ -1,19 +1,20 @@
 'strict mode'
 const Rx = require( 'Rx' )
 const ModifyVal = require( './modify-val' )
-const mv = new ModifyVal()
+const numberYield = require( './number-yield' )
 
-const disposable = Rx.Scheduler.default.schedule(
-  'world',
-  function (scheduler, x) { console.log('hello ' + x); }
-);
-
+const modifyVal = new ModifyVal()
 var intervalTime = 300
 var totalTime = 0
+const disposable = Rx.Scheduler.default.schedule(
+  'world',
+  function (scheduler, x) { console.log('hello ' + x)  }
+)
 const source = Rx.Observable
-    .range(0, 113 )
+    .from( numberYield() )
+    .take( 10 )
     .delay( ( x ) => { //.delayWithSelector(
-        intervalTime = mv.decrease( intervalTime )
+        intervalTime = modifyVal.decrease( intervalTime )
         totalTime = totalTime + intervalTime
         return Rx.Observable.timer( totalTime ) 
     } )
@@ -21,7 +22,6 @@ const source = Rx.Observable
     .map( ( x ) => { 
         return x.value + ':' + x.interval 
     });
-
 const subscription = source.subscribe(
     function (x) { 
         console.log( 'Next: ' + x ) 
