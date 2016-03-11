@@ -1,12 +1,23 @@
+'strict mode'
+const Rx = require( 'Rx' )
+const ModifyVal = require( './modify-val' )
+const mv = new ModifyVal()
 
-const Rx = require('Rx')
+const disposable = Rx.Scheduler.default.schedule(
+  'world',
+  function (scheduler, x) { console.log('hello ' + x); }
+);
 
+var intervalTime = 300
+var totalTime = 0
 const source = Rx.Observable
-    .range(0, 13 )
+    .range(0, 113 )
     .delay( ( x ) => { //.delayWithSelector(
-        return Rx.Observable.timer( 2000 * x ) 
+        intervalTime = mv.decrease( intervalTime )
+        totalTime = totalTime + intervalTime
+        return Rx.Observable.timer( totalTime ) 
     } )
-    .timeInterval()
+    .timeInterval(  disposable )
     .map( ( x ) => { 
         return x.value + ':' + x.interval 
     });
