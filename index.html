@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+Hello Rx
+<script src="node_modules/rx/dist/rx.all.js"></script>
+<script>
+console.log('rx', Rx )
+
+var stuff = Rx.Observable.from(
+    [1,2,3]
+).flatMap( ( value ) =>  {
+    
+    return Rx.Observable.from(
+        [ value, value + 10 ]
+    ).map( ( value ) => {
+        return value * value
+    })
+    .delay(function(x){ return Rx.Observable.timer( 1000 * x ) });
+}) 
+
+stuff.subscribe( (x) => {
+        console.log('Next:: ' + x);
+    },
+     ( err ) => {
+        console.log('Error: ' + err);
+    },
+    () => {
+        console.log('Completed');
+    }
+)
+</script>
+</body>
+</html>
