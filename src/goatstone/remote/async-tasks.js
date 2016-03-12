@@ -1,31 +1,21 @@
-/* async-tasks */
+/* goatstone.remote.async-tasks */
 'use strict'
-const async = require("async")
-const asyncTasks = []
+const async = require( "async" )
+//       taskFactory.get     getTask( 'twitter' )
+const twitterRemote = require( 'goatstone/remote/task/twitter-remote' )
+const countryRemote = require( 'goatstone/remote/task/country-remote' )
+const weatherRemote = require( 'goatstone/remote/task/weather-remote' )
+
 const tasks = [ 
-	{ task: cb => { 
-		console.log('a')  
-		cb() 
-	} }, 
-	{ task: cb => { 
-		setTimeout( () =>{ 
-			console.log('b')  
-			cb() 
-		}, 1000 ) 
-	} }, 
-	{ task: cb => { 
-		setTimeout( () => {
-			console.log('c')  
-			cb()
-		}, 3000 ) 
-	} } 
+	weatherRemote, 
+	twitterRemote, 
+	countryRemote
 ]
-tasks.forEach( ( e, i ) => {
-  asyncTasks.push( e.task )
-})
- 
-async.parallel( asyncTasks, onComplete )
+
+async.parallel( tasks.map( e => { 
+	return e.task 
+} ), onComplete )
 
 function onComplete(){
-	console.log("complete")
+	console.log("complete. . .")
 }

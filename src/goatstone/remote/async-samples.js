@@ -1,4 +1,4 @@
-/* async-samples */
+/* goatstone.remote.async-samples */
 const async = require( 'async' )
 
 var users = [];

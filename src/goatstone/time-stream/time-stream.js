@@ -20,5 +20,16 @@ const source = Rx.Observable
         return x.value + ':' + x.interval 
     });
 
+/**
+TimeStream represents an API over an Obervable
+@param  {function} funcStream Function to use as an event stream
+@returns Observable
+*/
+/**
+start start the stream 
+*/
+/**
+stop stop the stream
+*/
 
  module.exports = source
