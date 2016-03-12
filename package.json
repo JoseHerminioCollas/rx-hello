@@ -9,6 +9,10 @@
   "author": "Jose Collas",
   "license": "ISC",
   "dependencies": {
-    "rx": "^4.1.0"
+    "async": "^1.5.2",
+    "axios": "^0.9.1",
+    "q-io": "^1.13.2",
+    "rx": "^4.1.0",
+    "rx-dom": "^7.0.3"
   }
 }
