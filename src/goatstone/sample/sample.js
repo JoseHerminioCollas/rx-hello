@@ -1,12 +1,4 @@
-/*
-https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/events.md
-https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/retrywhen.md
-https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/pausable.md
-http://rxmarbles.com/#startWith
-http://reactivex.io/documentation/operators/delay.html
-https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/which-instance.md
-https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/timer.md
-*/
+/* goatstone.sample.sample */
 
 var startButton = document.getElementById('start');
 var pauseButton = document.getElementById('pause');

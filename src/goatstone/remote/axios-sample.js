@@ -1,5 +1,10 @@
 /* rx-dom-sample */
-
+/*
+get the weather
+depending on the weather get a country
+or get a book about the wether
+set up debugger
+*/
 const axios = require( 'axios' )
 
 axios.get('http://www.goatstone.com')
