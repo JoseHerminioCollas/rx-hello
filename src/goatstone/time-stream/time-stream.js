@@ -1,5 +1,5 @@
 'strict mode'
-const Rx = require( 'Rx' )
+const Rx = require( 'rx' )
 const ModifyVal = require( 'goatstone/util/modify-val' )
 const numberYield = require( 'goatstone/func-stream/number-yield' )
 
@@ -20,7 +20,22 @@ const source = Rx.Observable
         return x.value + ':' + x.interval 
     });
 
-/**
+ module.exports = source
+
+ // const source = require( 'goatstone/time-stream/time-stream' )
+
+// const subscription = source.subscribe(
+//     function (x) { 
+//         console.log( 'Next: ' + x ) 
+//     },
+//     function (err) { 
+//         console.log( 'Error: ' + err ) 
+//     },
+//     function () { 
+//         console.log( 'Completed' )  
+//     }) 
+
+/**     
 TimeStream represents an API over an Obervable
 @param  {function} funcStream Function to use as an event stream
 @returns Observable
@@ -31,5 +46,3 @@ start start the stream
 /**
 stop stop the stream
 */
-
- module.exports = source

@@ -3,10 +3,9 @@
 const twitterRemote = {
 	id: 111,
 	delay: 3000,
-	task:   cb => {
+	task: cb => {
 		setTimeout( () =>{ 
-			console.log('twitterRemote', twitterRemote.id)  		
-			cb() 
+			cb( null, twitterRemote ) 
 		}, twitterRemote.delay ) 
 	} }
 

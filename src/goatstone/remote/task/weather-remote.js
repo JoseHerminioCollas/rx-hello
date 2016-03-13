@@ -1,13 +1,12 @@
 /* goatstone.remote.task.weatherRemote */
 
 var config = require( 'goatstone/config' )
+const axios = require( 'axios' )
 
 const weatherRemote = {
 	id: config.openWeatherMapKey ,
 	q: 'London', // TODO use getter / setter here
-	task:   cb => {
-		console.log( 'qqq', weatherRemote.q)
-		const axios = require( 'axios' )
+	task: cb => {
 
 		axios.get('http://api.openweathermap.org/data/2.5/weather' +
 			'?q='+ 
@@ -15,12 +14,10 @@ const weatherRemote = {
 			',&appid=' + 
 			weatherRemote.id )
 		  .then(function (response) {
-		  	const br = response.data 
-		    console.log( br.wind );
-			cb() 
+			cb( null, response.data ) 
 		  })
 		  .catch(function (response) {
-		    console.log(response);
+		    // console.log(response);
 		  });
  
 	} }

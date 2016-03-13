@@ -3,10 +3,9 @@
 const countryRemote = {
 	id: 111,
 	delay: 1000,
-	task:   cb => {
+	task: cb => {
 		setTimeout( () =>{ 
-			console.log('countryRemote', countryRemote.id)  		
-			cb() 
+			cb( null, {a: 1} ) 
 		}, countryRemote.delay ) 
 	} }
 
