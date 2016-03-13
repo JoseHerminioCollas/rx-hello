@@ -2,9 +2,9 @@
   "name": "hellorx",
   "version": "1.0.0",
   "description": "A sandbox for Rx solutions",
-  "main": "index.js",
+  "main": "src/goatstone/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": " echo 1"
   },
   "author": "Jose Collas",
   "license": "ISC",
@@ -25,6 +25,9 @@
     "rx": "^4.1.0",
     "rx-dom": "^7.0.3",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1",
+    "webpack-stream": "^3.1.0"
   }
 }

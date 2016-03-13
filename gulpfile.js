@@ -16,6 +16,7 @@ var
   browserify = require('browserify'),
   // reactify = require('reactify'),
   streamify = require('gulp-streamify');
+var webpack = require('webpack-stream');
 
 var input  = {
   'javascript': 'src/goatstone/**/**/*.js',
@@ -28,25 +29,15 @@ gulp.task('watch', function() {
   gulp.watch(input.javascript, [  'build' ] );  
 });
 
-gulp.task('build', [ 'browserifyBundle', 'buildHTML' ] );
+gulp.task('build', [ 'webpack', 'buildHTML' ] );
+
+gulp.task('webpack', function() {
+  return gulp.src('./src/goatstone/index.js')
+    .pipe(webpack( require('./webpack.config.js') ))
+    .pipe(gulp.dest('dist/'));
+});
 
 gulp.task('buildHTML', function(){
     return gulp.src( input.html )         
         .pipe(gulp.dest('./dist/'));
-});
-
-gulp.task('browserifyBundle', function(){
-  return browserify( {
-      entries: ['./src/goatstone/index.js'],
-      debug: true
-    } )
-    .transform( babelify )
-    //.transform(reactify)
-    .bundle()
-    .on('error', gutil.log.bind(gutil, 'Browserify Error') )
-    .pipe( source('js/bundle.js') )
-    .pipe( buffer() )
-    .pipe( sourcemaps.init({loadMaps: true}) )  
-    .pipe( sourcemaps.write('./') )  
-    .pipe( gulp.dest('./dist') );
 });
