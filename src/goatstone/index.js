@@ -1,7 +1,9 @@
-'strict mode'
+'strict mode'   
 const Rx = require( 'rx' )
 const async = require( "async" )
-require( 'babel-polyfill' )     
+const React = require( 'react' )
+const ReactDOM = require( 'react-dom' )  
+require( 'babel-polyfill' ) 
 
 const tasks = require( 'goatstone/remote/task/tasks' )
 var startButton, pauseButton, wb, m
@@ -46,34 +48,32 @@ function onDocReady(){
 	async.parallel( tasks.map( e => { 
 		return e.task 
 	} ), onComplete )
-
+  
 }
 window.onload = function() {
+	m = document.getElementById( 'm' )
+	var Start = React.createClass({
+	 	render:  () => { 
+	 		return <button>Start</button>
+	 	}
+	 })  
+	var Stop = React.createClass({
+	 	render: () => { 
+	 		return <button>Stop</button>  
+	 	}
+	 })
+	var Weather = React.createClass({
+	 	render: () => { 
+	 		return <button>weather</button>  
+	 	}
+	 })
+	ReactDOM.render( <Stop />, document.getElementById( 'stop' ) ) 
+	ReactDOM.render( <Start />, document.getElementById( 'start' ) ) 
+	ReactDOM.render( <Weather />, document.getElementById( 'w' ) )
 
-	const el = document.createElement( 'button' )
-	el.id = 'start'
-	el.appendChild(document.createTextNode('start'))
-
-	const el1 = document.createElement( 'button' )
-	el1.id = 'pause'
-	el1.appendChild(document.createTextNode('pause'))
-
-	const el2 = document.createElement( 'button' )
-	el2.id = 'weather'
-	el2.appendChild(document.createTextNode('weather'))
-
-	m = document.createElement( 'div' )
-	m.id = 'm'
-	m.appendChild(document.createTextNode('m'))
-
-	document.body.appendChild( el )
-	document.body.appendChild( el1 )
-	document.body.appendChild( el2 )
-	document.body.appendChild( m )
- 
 	startButton = document.getElementById('start') 
-	pauseButton = document.getElementById('pause') 
-	wb = document.getElementById( 'weather' )
+	pauseButton = document.getElementById('stop') 
+	wb = document.getElementById( 'w' )
 	onDocReady()
 }
 
