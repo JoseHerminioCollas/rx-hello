@@ -6,12 +6,11 @@ const ReactDOM = require( 'react-dom' )
 require( 'babel-polyfill' ) 
 
 const tasks = require( 'goatstone/remote/task/tasks' )
-var startButton, pauseButton, wb, m
+var startButton, pauseButton, message, wb
 
 function onComplete( err, results ){
-	m.innerHTML = JSON.stringify ( results )
+	message.setState({a:false, x: JSON.stringify ( results )})
 }
-
 function onDocReady(){
 
 	const starts = Rx.Observable.fromEvent(startButton, 'click' ) 
@@ -34,24 +33,26 @@ function onDocReady(){
 	const ticks = Rx.Observable.timer( 0, 1000 ).pausable(
 		onOff
 	).subscribe(
-	   (x) => {
-		m.innerHTML = 'Next:: ' + x
+	   ( x ) => {
+		message.setState({a:false, x: x})
 	  },
-	  (err) => {
-		m.innerHTML = 'Error: ' + err
+	  ( err ) => {
+		message.setState({  x: err })
 	  },
 	  () => {
-		m.innerHTML = 'Completed'
+		message.setState({  x: 'Completed' })
 	  }
-	);
-
-	async.parallel( tasks.map( e => { 
-		return e.task 
-	} ), onComplete )
-  
+	)   
 }
 window.onload = function() {
-	m = document.getElementById( 'm' )
+	var Message = React.createClass({
+		getInitialState: function() {
+		    return {x: 'message'};
+  		},
+	 	render:  function() { 
+	 		return <div>[  {this.state.x} ]</div>
+	 	}
+	 })  
 	var Start = React.createClass({
 	 	render:  () => { 
 	 		return <button>Start</button>
@@ -63,18 +64,28 @@ window.onload = function() {
 	 	}
 	 })
 	var Weather = React.createClass({
-	 	render: () => { 
-	 		return <button>weather</button>  
+		hC: function(){
+			this.setState( {a:  false, x: 'abc'})
+		},
+		getInitialState: function() {
+		    return {a: true};
+  		},
+	 	render: function() { 
+	 		const tpd = (this.state.a) ? 'a' : 'b'
+	 		return <button onClick={this.hC}>weather{this.state.x} { tpd }</button>  
 	 	}
 	 })
-	ReactDOM.render( <Stop />, document.getElementById( 'stop' ) ) 
-	ReactDOM.render( <Start />, document.getElementById( 'start' ) ) 
-	ReactDOM.render( <Weather />, document.getElementById( 'w' ) )
+	ReactDOM.render( <Stop />, 
+		document.getElementById( 'stop' ) ) 
+	ReactDOM.render( <Start />, 
+		document.getElementById( 'start' ) ) 
+	ReactDOM.render( <Weather data={1} />, 
+		document.getElementById( 'w' ) )
+	message = ReactDOM.render( <Message />, 
+		document.getElementById( 'message' ) ) 
 
 	startButton = document.getElementById('start') 
 	pauseButton = document.getElementById('stop') 
 	wb = document.getElementById( 'w' )
 	onDocReady()
 }
-
-
