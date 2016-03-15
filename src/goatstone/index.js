@@ -3,33 +3,66 @@ const Rx = require( 'rx' )
 const async = require( "async" )
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
+const Message = require( 'goatstone/ui/message' )
+const Control = require( 'goatstone/ui/control' )
+const tasks = require( 'goatstone/remote/task/tasks' )
+var FuncSubject = require('rx-react').FuncSubject;
 require( 'babel-polyfill' ) 
 
-const tasks = require( 'goatstone/remote/task/tasks' )
 var startButton, pauseButton, message, wb
 
-function onComplete( err, results ){
-	message.setState({a:false, x: JSON.stringify ( results )})
+/* appSubject  
+	handles application componet gererated events
+*/
+const appSubject = FuncSubject.create()
+const source = appSubject
+source.subscribe( createObserver( 'SourceA' ) ) 
+source.subscribe( createObserver( 'SourceB' ) ) 
+const interval = Rx.Observable.interval( 1000 ).take( 2 )
+function createObserver( tag ) {
+    return Rx.Observer.create(
+        function ( x ) {
+			message.setState( { x: ` getting  results: ${tag} ${x}  ` } )
+			async.parallel( tasks.map( e => { 
+				return e.task 
+			} ), ( err, results ) => {
+				message.setState( { x: JSON.stringify ( results ) } )
+	 		} )
+        },
+        function ( err ) {
+            console.log('Error: ' + err)    
+        },
+        function () {
+            console.log('Completed')    
+        }) 
 }
-function onDocReady(){
 
+var Weather = require( 'goatstone/ui/weather' )( appSubject) 
+
+window.onload = function() {
+
+	ReactDOM.render( <Control />, 
+		document.getElementById( 'control' ) ) 
+	message = ReactDOM.render( <Message />, 
+		document.getElementById( 'message' ) ) 
+
+	ReactDOM.render( <Weather />, 
+		document.getElementById( 'w' ) ) 
+
+	startButton = document.getElementById('start') 
+	pauseButton = document.getElementById('stop') 
+	wb = document.getElementById( 'w' )
+	//onDocReady()
+}
+/*
+function onDocReady(){
+ 	 
 	const starts = Rx.Observable.fromEvent(startButton, 'click' ) 
 	const stops = Rx.Observable.fromEvent(pauseButton, 'click' ) 
-	const weather = Rx.Observable.fromEvent( wb, 'click' )
-	
-	// TODO select a city
-
-    weather.subscribe( ( e ) => {
-		async.parallel( tasks.map( e => { 
-			return e.task 
-		} ), onComplete )
-    }) 
-
 	const onOff = Rx.Observable.merge(
 		starts.map( (event) => { return true; }),
 	    stops.map( (event) => { return false; })
 	).startWith( false ) 
-
 	const ticks = Rx.Observable.timer( 0, 1000 ).pausable(
 		onOff
 	).subscribe(
@@ -44,48 +77,4 @@ function onDocReady(){
 	  }
 	)   
 }
-window.onload = function() {
-	var Message = React.createClass({
-		getInitialState: function() {
-		    return {x: 'message'};
-  		},
-	 	render:  function() { 
-	 		return <div>[  {this.state.x} ]</div>
-	 	}
-	 })  
-	var Start = React.createClass({
-	 	render:  () => { 
-	 		return <button>Start</button>
-	 	}
-	 })  
-	var Stop = React.createClass({
-	 	render: () => { 
-	 		return <button>Stop</button>  
-	 	}
-	 })
-	var Weather = React.createClass({
-		hC: function(){
-			this.setState( {a:  false, x: 'abc'})
-		},
-		getInitialState: function() {
-		    return {a: true};
-  		},
-	 	render: function() { 
-	 		const tpd = (this.state.a) ? 'a' : 'b'
-	 		return <button onClick={this.hC}>weather{this.state.x} { tpd }</button>  
-	 	}
-	 })
-	ReactDOM.render( <Stop />, 
-		document.getElementById( 'stop' ) ) 
-	ReactDOM.render( <Start />, 
-		document.getElementById( 'start' ) ) 
-	ReactDOM.render( <Weather data={1} />, 
-		document.getElementById( 'w' ) )
-	message = ReactDOM.render( <Message />, 
-		document.getElementById( 'message' ) ) 
-
-	startButton = document.getElementById('start') 
-	pauseButton = document.getElementById('stop') 
-	wb = document.getElementById( 'w' )
-	onDocReady()
-}
+*/
