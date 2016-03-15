@@ -1,35 +1,35 @@
-/* goatstone/ui/control */
+/* goatstone.ui.control */
+'strict mode'   
 const React = require( 'react' )
 
-var Start = React.createClass({
- 	render:  () => { 
- 		return <button>Start</button>
- 	}
- })  
-var Stop = React.createClass({
- 	render: () => { 
- 		return <button>Stop</button>  
- 	}
- })
-var Weather = React.createClass({
-	hC: function(){
-		this.setState( {a:  false, x: 'abc'})
-	},
-	getInitialState: function() {
-	    return {a: true};
+module.exports = function( appSubject ){
+
+	var Start = React.createClass({
+		componentWillMount: function(){
+			const THIS = this
+			this.startButton = appSubject
+			this.startButton.subscribe( x => console.log('start'))
 		},
- 	render: function() { 
- 		const tpd = (this.state.a) ? 'a' : 'b'
- 		return <button onClick={this.hC}>weather{this.state.x} { tpd }</button>  
- 	}
- })
-
-var Control = React.createClass( { 
-	render:  () => { 
-		return <div> 
-			<Stop /> <Start /><Weather data={1} />
-		</div>
-	} 
-})  
-
-module.exports = Control
+	 	render:  function() { 
+	 		return <button onClick={ this.startButton }>Start</button>
+	 	}
+	 })  
+	var Stop = React.createClass({
+		componentWillMount: function(){
+			const THIS = this
+			this.stopButton = appSubject
+			this.stopButton.subscribe( x => console.log('stop', this, x) )
+		},
+	 	render: function() { 
+	 		return <button onClick={ this.stopButton }>Stop</button>  
+	 	}
+	 })
+	var Control = React.createClass( { 
+		render: function() { 
+			return <div> 2
+						<Stop /> <Start /> 
+					</div>
+		} 
+	})  
+	return Control
+}

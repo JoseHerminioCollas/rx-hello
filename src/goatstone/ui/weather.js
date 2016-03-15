@@ -1,4 +1,4 @@
-/*  WeatherButton 
+/*  goatstone.ui.weather 
 	@param {function} Obervable Subject 
 */
 'use strict'
@@ -16,11 +16,11 @@ module.exports =  function( appSubject ){
 			} )
 		},
 		getInitialState: function() {
-		    return {a: true, b: '333'};
+		    return {a: true, b: 'b state val'};
 			},
 	 	render: function() { 
 	 		var stateA = (this.state.a) ? 'T' : 'F'
-	 		return	<div> 222
+	 		return	<div>
 	 					<button onClick={ this.buttonA }> Get Weather </button>
 	 					    {this.state.b} { stateA }  
 	 				</div>  
