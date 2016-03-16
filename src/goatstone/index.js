@@ -6,55 +6,62 @@ const ReactDOM = require( 'react-dom' )
 const FuncSubject = require('rx-react').FuncSubject 
 const Cloud = require( 'goatstone/remote/cloud' )
 require( 'babel-polyfill' ) 
-console.log( 99 )       
+//
+const cloud = new Cloud( { owKey: 'abc' } )
 /* appSubjectSource   
 	handles application componet gererated events
 */
 const appSubjectSource = FuncSubject.create()
-const cloud = new Cloud( { owKey: 'abc' } )
-appSubjectSource.subscribe( 
-    ( x ) => {
-        /* call only if  the  weather button is pushed */ 
-        if( x.type === 'click' ){
-            new Rx.Observable.fromPromise( cloud.weather() )
-            .subscribe(
-                (x) => {
-                  console.log('cloud.weather: ' + x)
-                  appSubjectSource.onNext( x )     
-                },
-                (e) => { console.log('cloud weather error: ' + e.message) },
-                () => { console.log('cloud weather completed: ') })
-        }
-    },
-    ( err ) => { console.log('Error: ' + err) },
-    () => { console.log('Completed') }  
- ) 
-const Weather = require( 'goatstone/ui/weather' )( appSubjectSource ) 
 const Message = require( 'goatstone/ui/message' )( appSubjectSource )
 
 /* controlSubjectSource 
     handles the stream from the control panel
 */
 const controlSubjectSource = FuncSubject.create()
-controlSubjectSource.subscribe( controlObserver( 'SourceAA' ) ) 
-controlSubjectSource.subscribe( controlObserver( 'SourceBB' ) ) 
+const Control = require( 'goatstone/ui/control' )( controlSubjectSource ) 
+
+controlSubjectSource
+.filter( evnt => { 
+    return ( evnt.type === 'click' && evnt.target.name === 'stop' ) 
+} )
+.subscribe( controlObserver( 'SourceAA' ) ) 
 function controlObserver( tag ) {
     return Rx.Observer.create(
         ( x ) => {
-            console.log('TTTT 5: ' + tag )    
-            // console.log( x )            	
-        },
-        ( err ) => { console.log('Error: ' + err) },
-        () => { console.log('Completed') } ) 
+            console.log( ` stop source ${x} ${tag}`, x )            	
+        }, err => { console.log( 'error: ', err ) }, () => { console.log( 'complete' ) } ) 
 }
-// call the ui compoent modules
-const Control = require( 'goatstone/ui/control' )( controlSubjectSource ) 
+
+controlSubjectSource
+.filter( evnt => { 
+    return ( evnt.type === 'click' && evnt.target.name === 'weather' ) 
+} )
+.subscribe( evnt => {
+
+    new Rx.Observable.fromPromise( cloud.weather() )
+    .subscribe(
+    (x) => {
+      console.log('cloud.weather: ' + x)
+      appSubjectSource.onNext( x )     
+    },
+    (e) => { console.log('cloud weather error: ' + e.message) },
+    () => { console.log('cloud weather completed: ') })
+
+}, err => { console.log( 'error: ', err ) }, () => { console.log( 'complete' ) } ) 
+
+controlSubjectSource
+.filter( evnt => { 
+    return ( evnt.type === 'click' && evnt.target.name === 'start' ) 
+} )
+.subscribe( evnt => {
+    console.log( 'start', evnt )
+}, err => { console.log( 'error: ', err ) }, () => { console.log( 'complete' ) } ) 
+
 
 window.onload = function() {
 	ReactDOM.render( <Control />, 
 		document.getElementById( 'control' ) ) 
 	ReactDOM.render( <Message />, 
 		document.getElementById( 'message' ) ) 
-	ReactDOM.render( <Weather />, 
-		document.getElementById( 'weather' ) ) 
 }
+console.log( 44 )

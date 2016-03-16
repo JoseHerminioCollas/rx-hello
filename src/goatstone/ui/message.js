@@ -7,7 +7,6 @@ module.exports = function( appSubject ){
 		componentWillMount: function( x ){
 			
 			appSubject.subscribe( e => {
-				// console.log( 'xxx', e )
 				const d = ( e.data && e.data[0]  )? JSON.stringify( e.data[0] ) : 'Default Name' 
 				this.setState( { message: ` [ ${ d } ] `  } )
 			} )  
