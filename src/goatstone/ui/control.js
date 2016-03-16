@@ -26,7 +26,7 @@ module.exports = function( appSubject ){
 	 })
 	var Control = React.createClass( { 
 		render: function() { 
-			return <div> 2
+			return <div> 
 						<Stop /> <Start /> 
 					</div>
 		} 
