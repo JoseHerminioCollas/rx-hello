@@ -1,34 +1,31 @@
-/* goatstone.index */
+/* goatstone.index   */
 'strict mode'   
 const Rx = require( 'rx' )
 const async = require( "async" )
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
-const Message = require( 'goatstone/ui/message' )
 const tasks = require( 'goatstone/remote/task/tasks' )
 const FuncSubject = require('rx-react').FuncSubject;
 require( 'babel-polyfill' ) 
 
-var message // TODO set this as an Observable
-
-/* appSubject   
+/* appSubjectSource   
 	handles application componet gererated events
 */
-const appSubject = FuncSubject.create()
-const source = appSubject
-source.subscribe( createObserver( 'SourceA' ) ) 
-source.subscribe( createObserver( 'SourceB' ) ) 
+const appSubjectSource = FuncSubject.create()
+appSubjectSource.subscribe( createObserver( 'SourceA' ) ) 
+//appSubjectSource.subscribe( createObserver( 'SourceB' ) ) 
 function createObserver( tag ) {
     return Rx.Observer.create(
         function ( x ) {
-            console.log('T: ' + tag )    
-            console.log('x: ' + x )    
-			message.setState( { x: ` getting  results: ${tag} ${x}  ` } )
-			async.parallel( tasks.map( e => { 
-				return e.task 
-			} ), ( err, results ) => {
-				message.setState( { x: JSON.stringify ( results ) } )
-	 		} )
+            /* call only if the  weather button is pushed */
+            if( x.type === 'click' ){
+                async.parallel( tasks.map( e => { 
+                    return e.task 
+                } ), ( err, results ) => {
+                    // results are returned from the server
+                    appSubjectSource.onNext( { type: 'results', data: results } )
+                } )                
+            }
         },
         function ( err ) {
             console.log('Error: ' + err)    
@@ -37,17 +34,20 @@ function createObserver( tag ) {
             console.log('Completed')    
         }) 
 }
-// Control
-const controlSubject = FuncSubject.create()
-const controlSubjectSource = controlSubject
+const Weather = require( 'goatstone/ui/weather' )( appSubjectSource ) 
+const Message = require( 'goatstone/ui/message' )( appSubjectSource )
+
+/* controlSubjectSource 
+    handles the stream from the control panel
+*/
+const controlSubjectSource = FuncSubject.create()
 controlSubjectSource.subscribe( controlObserver( 'SourceAA' ) ) 
 controlSubjectSource.subscribe( controlObserver( 'SourceBB' ) ) 
 function controlObserver( tag ) {
     return Rx.Observer.create(
         function ( x ) {
-            console.log('TTTT: ' + tag )    
-            console.log( x )            	
-			message.setState( { x: ` getting  results: ${ tag } ${ x.pageX }  ${ new Date() } ` } )
+            console.log('TTTT 5: ' + tag )    
+            // console.log( x )            	
         },
         function ( err ) {
             console.log('Error: ' + err)    
@@ -57,13 +57,12 @@ function controlObserver( tag ) {
         }) 
 }
 // call the ui compoent modules
-const Control = require( 'goatstone/ui/control' )( controlSubject ) 
-const Weather = require( 'goatstone/ui/weather' )( appSubject ) 
+const Control = require( 'goatstone/ui/control' )( controlSubjectSource ) 
 
 window.onload = function() {
 	ReactDOM.render( <Control />, 
 		document.getElementById( 'control' ) ) 
-	message = ReactDOM.render( <Message />, 
+	ReactDOM.render( <Message />, 
 		document.getElementById( 'message' ) ) 
 	ReactDOM.render( <Weather />, 
 		document.getElementById( 'weather' ) ) 
