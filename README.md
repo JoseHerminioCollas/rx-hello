@@ -1,6 +1,6 @@
-# hellorx
+# RxHello
 
-hellorx ( Hello Rx ),  A place to work out Rx and async issues.
+RxHello ,  A place to work out Rx and async issues.
 
 ## Methodologies to Establish
 

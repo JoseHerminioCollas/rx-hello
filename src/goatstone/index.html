@@ -1,19 +1,58 @@
 <!doctype html>
 <html>
 <head>
-<title>helloRx</title>
+	<title>RxHello</title>
+	<meta charset="utf8">
+<style type="text/css">
+body{
+	background-color: hsla( 0, 50%, 50%, 1.0 );	
+	font-family: sans-serif;
+}
+h1{
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	padding: 7px;
+	border-radius: 7px 0 0 0;
+	background-color: hsla( 40, 50%, 50%, 1.0 );
+}
+div{
+	padding: 7px;
+	border-radius: 7px;
+}
+#message{
+	position: absolute;
+	transform: translate( 1%, 1% );
+    transform-origin: 0 -250px; 
+	background-color: hsla( 100, 50%, 50%, 0.7 );
+	z-index: -1000;
+	min-height: 30%;
+	max-height: 90%;
+	min-width: 60%;
+	max-width: 90%;
+	overflow: auto;
+}
+#control{
+	position: fixed;
+	left: 2%;
+	bottom: 2%;
+	background-color: hsla( 160, 50%, 50%, 0.5 );
+}
+#weather{
+	position: fixed;
+	left: 20%;
+	bottom: 2%;
+	background-color: hsla( 200, 50%, 50%, 1.0 );
+}
+</style>
+
+
 </head>
 <body>
-<div id="control">
-	<div id="stop"></div>
-	<div id="start"></div>
-	<div id="w"></div>
-</div>
-
-<div id="m"></div>
-
-<h1>hellorx</h1>
-
-<script src="bundle.js"></script>
+	<div id="weather"></div>
+	<div id="control"></div>
+	<div id="message"></div>
+	<h1>RxHello</h1>
+	<script src="bundle.js"></script>
 </body>
 </html>

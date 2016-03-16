@@ -1,80 +1,69 @@
+/* goatstone.index   */
 'strict mode'   
 const Rx = require( 'rx' )
 const async = require( "async" )
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
+const tasks = require( 'goatstone/remote/task/tasks' )
+const FuncSubject = require('rx-react').FuncSubject;
 require( 'babel-polyfill' ) 
 
-const tasks = require( 'goatstone/remote/task/tasks' )
-var startButton, pauseButton, wb, m
-
-function onComplete( err, results ){
-	m.innerHTML = JSON.stringify ( results )
+/* appSubjectSource   
+	handles application componet gererated events
+*/
+const appSubjectSource = FuncSubject.create()
+appSubjectSource.subscribe( createObserver( 'SourceA' ) ) 
+//appSubjectSource.subscribe( createObserver( 'SourceB' ) ) 
+function createObserver( tag ) {
+    return Rx.Observer.create(
+        function ( x ) {
+            /* call only if the  weather button is pushed */
+            if( x.type === 'click' ){
+                async.parallel( tasks.map( e => { 
+                    return e.task 
+                } ), ( err, results ) => {
+                    // results are returned from the server
+                    appSubjectSource.onNext( { type: 'results', data: results } )
+                } )                
+            }
+        },
+        function ( err ) {
+            console.log('Error: ' + err)    
+        },
+        function () {
+            console.log('Completed')    
+        }) 
 }
+const Weather = require( 'goatstone/ui/weather' )( appSubjectSource ) 
+const Message = require( 'goatstone/ui/message' )( appSubjectSource )
 
-function onDocReady(){
-
-	const starts = Rx.Observable.fromEvent(startButton, 'click' ) 
-	const stops = Rx.Observable.fromEvent(pauseButton, 'click' ) 
-	const weather = Rx.Observable.fromEvent( wb, 'click' )
-	
-	// TODO select a city
-
-    weather.subscribe( ( e ) => {
-		async.parallel( tasks.map( e => { 
-			return e.task 
-		} ), onComplete )
-    }) 
-
-	const onOff = Rx.Observable.merge(
-		starts.map( (event) => { return true; }),
-	    stops.map( (event) => { return false; })
-	).startWith( false ) 
-
-	const ticks = Rx.Observable.timer( 0, 1000 ).pausable(
-		onOff
-	).subscribe(
-	   (x) => {
-		m.innerHTML = 'Next:: ' + x
-	  },
-	  (err) => {
-		m.innerHTML = 'Error: ' + err
-	  },
-	  () => {
-		m.innerHTML = 'Completed'
-	  }
-	);
-
-	async.parallel( tasks.map( e => { 
-		return e.task 
-	} ), onComplete )
-  
+/* controlSubjectSource 
+    handles the stream from the control panel
+*/
+const controlSubjectSource = FuncSubject.create()
+controlSubjectSource.subscribe( controlObserver( 'SourceAA' ) ) 
+controlSubjectSource.subscribe( controlObserver( 'SourceBB' ) ) 
+function controlObserver( tag ) {
+    return Rx.Observer.create(
+        function ( x ) {
+            console.log('TTTT 5: ' + tag )    
+            // console.log( x )            	
+        },
+        function ( err ) {
+            console.log('Error: ' + err)    
+        },
+        function () {
+            console.log('Completed')    
+        }) 
 }
+// call the ui compoent modules
+const Control = require( 'goatstone/ui/control' )( controlSubjectSource ) 
+
 window.onload = function() {
-	m = document.getElementById( 'm' )
-	var Start = React.createClass({
-	 	render:  () => { 
-	 		return <button>Start</button>
-	 	}
-	 })  
-	var Stop = React.createClass({
-	 	render: () => { 
-	 		return <button>Stop</button>  
-	 	}
-	 })
-	var Weather = React.createClass({
-	 	render: () => { 
-	 		return <button>weather</button>  
-	 	}
-	 })
-	ReactDOM.render( <Stop />, document.getElementById( 'stop' ) ) 
-	ReactDOM.render( <Start />, document.getElementById( 'start' ) ) 
-	ReactDOM.render( <Weather />, document.getElementById( 'w' ) )
-
-	startButton = document.getElementById('start') 
-	pauseButton = document.getElementById('stop') 
-	wb = document.getElementById( 'w' )
-	onDocReady()
+	ReactDOM.render( <Control />, 
+		document.getElementById( 'control' ) ) 
+	ReactDOM.render( <Message />, 
+		document.getElementById( 'message' ) ) 
+	ReactDOM.render( <Weather />, 
+		document.getElementById( 'weather' ) ) 
 }
-
-
