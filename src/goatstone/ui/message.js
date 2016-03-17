@@ -1,25 +1,26 @@
-/* goatstone.ui.message  */
+/* goatstone.ui.Message  */
 const React = require( 'react' )
 
 module.exports = function( appSubject ){
 
 	var Message = React.createClass({
-		componentWillMount: function( x ){
-			
+		componentWillMount: function( x ){			
 			appSubject.subscribe( e => {
-				// console.log( 'xxx', e )
-				const d = ( e.data && e.data[0]  )? JSON.stringify( e.data[0] ) : 'Default Name' 
-				this.setState( { message: ` [ ${ d } ] `  } )
+				this.setState( { messageArr: e } )
 			} )  
 		},
 		getInitialState: function() {
-		    return { message: 'init message', title: 'init title'} 
+		    return { message: 'init message', title: 'init title', messageArr: []} 
 			},
 	 	render:  function() {
-	 		const msg = (this.state.message)? this.state.message : ' - - - ' 
-	 		return <div>  { msg }  </div>
+	 		const items = this.state.messageArr.map( function( e, i ){
+	 			return <div key={ i }>
+	 				{ e.label }   
+	 				<em> { e.value } </em> 
+	 			</div>
+	 		})
+	 		return <div> { items } </div>
 	 	}
 	 })  
-
 	return Message
 }

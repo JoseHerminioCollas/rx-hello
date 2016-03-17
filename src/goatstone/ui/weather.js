@@ -20,9 +20,8 @@ module.exports =  function( appSubject ){
 			},
 	 	render: function() { 
 	 		var stateA = (this.state.a) ? 'T' : 'F'
-	 		return	<div>
-	 					<button onClick={ this.buttonA }> Get Weather </button>  
-	 				</div>  
+	 		return	<button onClick={ this.buttonA } name="weather" value="1"> Get Weather </button>  
+	 				 
 	 	}
 	 })
 
