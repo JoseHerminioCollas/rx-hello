@@ -5,8 +5,10 @@ const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
 const FuncSubject = require('rx-react').FuncSubject 
 const Cloud = require( 'goatstone/remote/cloud' )
+const Format = require( 'goatstone/text/format' )
 require( 'babel-polyfill' ) 
 //
+const format = new Format()
 const cloud = new Cloud( { owKey: 'abc' } )
 /* appSubjectSource   
 	handles application componet gererated events
@@ -40,9 +42,9 @@ controlSubjectSource
 
     new Rx.Observable.fromPromise( cloud.weather() )
     .subscribe(
-    (x) => {
-      console.log('cloud.weather: ' + x)
-      appSubjectSource.onNext( x )     
+    (x) => { 
+      const formatedContent = format.JSONtoHTML( x.data )
+      appSubjectSource.onNext( formatedContent )     
     },
     (e) => { console.log('cloud weather error: ' + e.message) },
     () => { console.log('cloud weather completed: ') })
