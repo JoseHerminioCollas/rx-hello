@@ -6,58 +6,48 @@ const ReactDOM = require( 'react-dom' )
 const FuncSubject = require('rx-react').FuncSubject 
 const Cloud = require( 'goatstone/remote/cloud' )
 const Format = require( 'goatstone/text/format' )
+const oCBacks = require( 'goatstone/util/o-call-backs' ) 
 require( 'babel-polyfill' ) 
-//
+
 const format = new Format()
 const cloud = new Cloud( { owKey: 'abc' } )
-/* appSubjectSource   
-	handles application componet gererated events
-*/
-const appSubjectSource = FuncSubject.create()
-const Message = require( 'goatstone/ui/message' )( appSubjectSource )
+const appStream = FuncSubject.create()
+const controlStream = FuncSubject.create()
+const Control = require( 'goatstone/ui/control' )( controlStream ) 
+const Message = require( 'goatstone/ui/message' )( appStream )
 
-/* controlSubjectSource 
-    handles the stream from the control panel
-*/
-const controlSubjectSource = FuncSubject.create()
-const Control = require( 'goatstone/ui/control' )( controlSubjectSource ) 
-
-controlSubjectSource
-.filter( evnt => { 
-    return ( evnt.type === 'click' && evnt.target.name === 'stop' ) 
-} )
-.subscribe( controlObserver( 'SourceAA' ) ) 
-function controlObserver( tag ) {
-    return Rx.Observer.create(
-        ( x ) => {
-            console.log( ` stop source ${x} ${tag}`, x )            	
-        }, err => { console.log( 'error: ', err ) }, () => { console.log( 'complete' ) } ) 
-}
-
-controlSubjectSource
+// weather 
+controlStream
 .filter( evnt => { 
     return ( evnt.type === 'click' && evnt.target.name === 'weather' ) 
 } )
-.subscribe( evnt => {
+.map( evnt => {
+    return Rx.Observable.fromPromise( cloud.weather() )
+})
+.flatMap( x => { 
+    return x 
+} )
+.subscribe( x => {
+    appStream.onNext( { type:'content', data: format.JSONtoHTML( x.data ) } )     
+}, oCBacks.error, oCBacks.complete )
 
-    new Rx.Observable.fromPromise( cloud.weather() )
-    .subscribe(
-    (x) => { 
-      const formatedContent = format.JSONtoHTML( x.data )
-      appSubjectSource.onNext( formatedContent )     
-    },
-    (e) => { console.log('cloud weather error: ' + e.message) },
-    () => { console.log('cloud weather completed: ') })
-
-}, err => { console.log( 'error: ', err ) }, () => { console.log( 'complete' ) } ) 
-
-controlSubjectSource
+// stop
+controlStream
+.filter( evnt => { 
+    return ( evnt.type === 'click' && evnt.target.name === 'stop' ) 
+} )
+.subscribe( x => {
+            console.log( ` stop source ${x} ${tag}`, x )                
+        }, oCBacks.err, oCBacks.complete 
+ ) 
+// start
+controlStream
 .filter( evnt => { 
     return ( evnt.type === 'click' && evnt.target.name === 'start' ) 
 } )
 .subscribe( evnt => {
     console.log( 'start', evnt )
-}, err => { console.log( 'error: ', err ) }, () => { console.log( 'complete' ) } ) 
+}, oCBacks.err, oCBacks.complete )
 
 
 window.onload = function() {
@@ -65,5 +55,9 @@ window.onload = function() {
 		document.getElementById( 'control' ) ) 
 	ReactDOM.render( <Message />, 
 		document.getElementById( 'message' ) ) 
+
+    appStream.onNext( { type:'error', data: [ { label:'hello', value: 'warn' } ] } )     
+    appStream.onNext( { type:'content', data: [ { label:'hello', value: 'content' } ] } )     
+    appStream.onNext( { type:'warn', data: [ { label:'hello', value: 'warn' } ] } )     
+
 }
-console.log( 44 )

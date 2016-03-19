@@ -9,10 +9,9 @@ module.exports =  function( appSubject ){
 
 	var Weather = React.createClass( {
 		componentWillMount: function(){
-			const THIS = this
 			this.buttonA = appSubject
-			this.buttonA.subscribe( function ( e ){
-				THIS.setState( { a: false, b: 'clicked!' } )
+			this.buttonA.subscribe(   ( e ) => {
+				this.setState( { a: false, b: 'clicked!' } )
 			} )
 		},
 		getInitialState: function() {
