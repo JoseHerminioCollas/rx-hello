@@ -2,21 +2,14 @@
 'use strict'
 const Rx = require( 'rx' )
 const async = require( "async" )
-const tasks = require( 'goatstone/remote/task/tasks' )
+const weatherRemote = require( 'goatstone/remote/task/weather-remote' )
 
 function Cloud(){
     this.owKey = 'owkey'
 }
 Cloud.prototype.weather = function(){
-    return new Promise( function (resolve, reject) {
-        async.parallel( tasks.map( e => { 
-            return e.task 
-        } ), ( err, results ) => {
-            // results are returned from the server 
-            resolve( { type: 'results', data: results } )
-        } )                
 
-    } )
+    return weatherRemote.getPromise()
 }
 Cloud.prototype.twitter = function(){
     return new Promise( function ( resolve, reject ) {

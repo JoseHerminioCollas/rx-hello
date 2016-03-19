@@ -3,7 +3,7 @@
 
 module.exports = {
 	error: err => {
-		console.log('error ', err)
+		throw err
 	},
 	complete: x => {
 		console.log( 'complete' )

@@ -11,15 +11,6 @@ const wr =  {
 		return axios.get(
 			`${wr.url}?q=${wr.q}&appid=${wr.id}` 
 			)
-	},
-	task: cb => {
-		wr.getPromise()
-		.then(function (response) {
-			cb( null, response.data ) 
-		})
-		.catch(function (response) {
-			// console.log(response);
-		}); 
-	} 
+	}
 }
 module.exports = wr
