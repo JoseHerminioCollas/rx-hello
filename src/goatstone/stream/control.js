@@ -19,7 +19,7 @@ module.exports = function (appStream) {
         .subscribe( x => {
             appStream.onNext({
                 type: 'content',
-                data: format.JSONtoHTML(  [ x.data ] )
+                data: format.JSONtoContentList( x.data )
             })
         }, oCBacks.error, oCBacks.complete )
 

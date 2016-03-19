@@ -2,29 +2,33 @@
 'use strict'
 var traverse = require('traverse');
 
-// display these items with labels goatstone.text.label.openWeather
+// display these items with labels  
 var labels = {
-    '0,name': 'Name',
-    '0,weather,0,description': 'Weather',
-	'0,coord,lon': 'Longitude',
-	'0,coord,lat': 'Latitude',
-	'0,weather,0,main': 'Weather',
-	'0,weather,0,description': 'Weather Description',
-	'0,main,temp': 'Temerature',
-	'0,main,pressure': 'Pressure',
-	'0,main,humidity': 'Humidity',
-	'0,main,temp_min': 'Minimum Temperature',
-	'0,main,temp_max': 'Maximum Temperature',
-	'0,wind,speed': 'Wind Speed',
-	'0,wind,gust': 'Wind Gusts',
-	'0,sys,country': 'Country',
-	'0,sys,sunrise': 'Sun Rise',
-	'0,sys,sunset': 'Sun Set' 
+    'name': 'Name',
+    'clouds,all': 'Weather',
+	'coord,lon': 'Longitude',
+	'coord,lat': 'Latitude',
+	'weather,0,main': 'Weather',
+	'weather,0,description': 'Weather Description',
+	'main,temp': 'Temerature',
+	'main,pressure': 'Pressure',
+	'main,humidity': 'Humidity',
+	'main,temp_min': 'Minimum Temperature',
+	'main,temp_max': 'Maximum Temperature',
+	'wind,speed': 'Wind Speed',
+	'wind,gust': 'Wind Gusts',
+	'wind,deg': 'Wind Degree',
+	'sys,country': 'Country',
+	'sys,sunrise': 'Sun Rise',
+	'sys,sunset': 'Sun Set' 
 }
-function Format(){
-	this.a = 1
-}
-Format.prototype.JSONtoHTML = function ( jsonObj ){
+function Format(){}
+/**
+ * Convert a JSON object into a list of values and labels that will be used for display. 
+ * @param { JSON Object } jsonObj
+ * @return	{ array } displayContent
+*/
+Format.prototype.JSONtoContentList = function ( jsonObj ){
 	var objElements = {}
 	traverse( jsonObj ).forEach(function ( e ) {
 	    if (typeof e === 'string' || typeof e === 'number') {

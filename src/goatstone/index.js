@@ -10,7 +10,6 @@ const Message = require( 'goatstone/ui/message' )( appStream )
 require( 'babel-polyfill' ) 
 
 window.onload = function() {
-    console.log(' mm ')
 	ReactDOM.render( <Control />, 
 		document.getElementById( 'control' ) ) 
 	ReactDOM.render( <Message />, 
