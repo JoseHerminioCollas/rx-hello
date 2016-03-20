@@ -12,10 +12,8 @@ module.exports = function( appSubject ){
 			return { value: 'start' }
 		},
 		componentWillMount: function(){
-			const THIS = this
 			this.startButton = appSubject
 			this.startButton.subscribe( x => {
-				//console.log('start') 	
 			}, err => err, () => { return 'complete' } ) 
 		},
 	 	render:  function() { 
@@ -27,7 +25,6 @@ module.exports = function( appSubject ){
 			const THIS = this
 			this.stopButton = appSubject
 			this.stopButton.subscribe( x => {
-				//console.log('stop', this, x) 
 			})
 		},
 	 	render: function() { 
