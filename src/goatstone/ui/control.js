@@ -1,19 +1,27 @@
 /* goatstone.ui.control */
 'strict mode'   
 const React = require( 'react' )
+//eventFactory.get( type, name, data) TODO
+const FuncSubject = require('rx-react').FuncSubject 
 
-module.exports = function( appSubject ){
+module.exports = function( controlStream ){
 
-	const Weather = require( 'goatstone/ui/weather' )( appSubject ) 
+	const Weather = require( 'goatstone/ui/weather' )( controlStream ) 
 	
 	var Start = React.createClass({
-		v: 22,
 		getInitialState: function(){
 			return { value: 'start' }
 		},
 		componentWillMount: function(){
-			this.startButton = appSubject
-			this.startButton.subscribe( x => {
+			this.startButton = FuncSubject.create(function(e){
+				return e.target.value
+			})
+			this.startButton.subscribe( x => { 
+				controlStream.onNext( { 
+					type:'control', 
+					name: 'start', 
+					data: { speed:1000 }
+				} )
 			}, err => err, () => { return 'complete' } ) 
 		},
 	 	render:  function() { 
@@ -23,7 +31,7 @@ module.exports = function( appSubject ){
 	var Stop = React.createClass({
 		componentWillMount: function(){
 			const THIS = this
-			this.stopButton = appSubject
+			this.stopButton = controlStream
 			this.stopButton.subscribe( x => {
 			})
 		},

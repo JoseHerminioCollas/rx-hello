@@ -3,12 +3,12 @@ const React = require( 'react' )
 var StateStreamMixin = require('rx-react').StateStreamMixin;
 const Rx = require( 'rx' ) 
 
-module.exports = function( appSubject ){
+module.exports = function( appStream ){
 
 	var Message = React.createClass({
 		mixins: [ StateStreamMixin ],
 		getStateStream: function () {
-			return appSubject
+			return appStream
 			.filter( function( evnt ){ 
 				return evnt.type === 'content'
 			} )

@@ -4,15 +4,22 @@
 'use strict'
 const Rx = require( 'rx' )
 const React = require( 'react' )
+const FuncSubject = require('rx-react').FuncSubject 
 
-module.exports =  function( appSubject ){
+module.exports =  function( controlStream ){
 
 	var Weather = React.createClass( {
 		componentWillMount: function(){
-			this.buttonA = appSubject
-			this.buttonA.subscribe(   ( e ) => {
-				this.setState( { a: false, b: 'clicked!' } )
-			} )
+			this.buttonA = FuncSubject.create( ( e ) => {
+				return e.target.value
+			})
+			this.buttonA.subscribe( x => { 
+				controlStream.onNext( { 
+					type: 'getData', 
+					name: 'weather', 
+					data: { speed:1000 }
+				} )
+			}, err => err, () => { return 'complete' } ) 
 		},
 		getInitialState: function() {
 		    return {a: true, b: 'b state val'};
