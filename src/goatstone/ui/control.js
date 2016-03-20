@@ -1,48 +1,38 @@
 /* goatstone.ui.control */
 'strict mode'   
 const React = require( 'react' )
-//eventFactory.get( type, name, data) TODO
 const FuncSubject = require('rx-react').FuncSubject 
 
 module.exports = function( controlStream ){
 
-	const Weather = require( 'goatstone/ui/weather' )( controlStream ) 
-	
-	var Start = React.createClass({
-		getInitialState: function(){
-			return { value: 'start' }
-		},
-		componentWillMount: function(){
-			this.startButton = FuncSubject.create(function(e){
-				return e.target.value
-			})
-			this.startButton.subscribe( x => { 
-				controlStream.onNext( { 
-					type:'control', 
-					name: 'start', 
-					data: { speed:1000 }
-				} )
-			}, err => err, () => { return 'complete' } ) 
-		},
-	 	render:  function() { 
-	 		return <button onClick={ this.startButton } name="start" value="1">Start</button>
-	 	}
-	 })  
-	var Stop = React.createClass({
-		componentWillMount: function(){
-			const THIS = this
-			this.stopButton = controlStream
-			this.stopButton.subscribe( x => {
-			})
-		},
-	 	render: function() { 
-	 		return <button onClick={ this.stopButton } name="stop" value="100">Stop</button>  
-	 	}
-	 })
+	const weather = React.createElement( 'button', { 
+		'data-type': 'getData', 
+		'data-name': 'weather' 
+	}, 'Weather' ) 
+	const start = React.createElement( 'button', { 
+		'data-type': 'control', 
+		'data-name': 'start' 
+	}, 'Start' ) 
+	const stop = React.createElement( 'button', { 
+		'data-type': 'control', 
+		'data-name': 'stop' 
+	}, 'Stop' ) 
+
 	var Control = React.createClass( { 
+		componentWillMount: function(){
+			this.clickHandler = FuncSubject.create( function(e){
+				return { type: e.target.dataset.type, name: e.target.dataset.name }
+			})
+			this.clickHandler.subscribe( x => {
+				controlStream.onNext( {
+					type: x.type,
+					name: x.name
+				} )
+			}, err => err, () => { return 'complete' } )
+		},
 		render: function() { 
-			return <div> 
-						<Stop /> <Start /> <Weather />
+			return 	<div onClick={ this.clickHandler }>
+						{ weather } { start } { stop } 
 					</div>
 		} 
 	})  

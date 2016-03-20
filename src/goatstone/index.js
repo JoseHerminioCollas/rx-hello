@@ -26,8 +26,6 @@ window.onload = function() {
 			{ label:'Welcome', value:'RxHello'}
 		]
 	} )
-
-	console.log( 111 )
 }
 /*  
 Event Interface 
