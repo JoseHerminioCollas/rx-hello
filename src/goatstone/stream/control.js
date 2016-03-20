@@ -17,6 +17,7 @@ module.exports = function (appStream) {
         .filter(x => x.type === 'click' && x.target.name === 'weather')
         .flatMap( x => Rx.Observable.fromPromise( cloud.weather() ) )
         .subscribe( x => {
+            cloud.map()
             appStream.onNext({
                 type: 'content',
                 data: format.JSONtoContentList( x.data )

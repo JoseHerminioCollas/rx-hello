@@ -7,6 +7,7 @@ const appStream = FuncSubject.create()
 const controlStream = require( 'goatstone/stream/control' )( appStream )
 const Control = require( 'goatstone/ui/control' )( controlStream ) 
 const Message = require( 'goatstone/ui/message' )( appStream )
+const oCBacks = require('goatstone/util/o-call-backs')
 require( 'babel-polyfill' ) 
 
 window.onload = function() {
@@ -14,5 +15,5 @@ window.onload = function() {
 		document.getElementById( 'control' ) ) 
 	ReactDOM.render( <Message />, 
 		document.getElementById( 'message' ) ) 
-
+		
 }

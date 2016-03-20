@@ -3,13 +3,17 @@
 const Rx = require( 'rx' )
 const async = require( "async" )
 const weatherRemote = require( 'goatstone/remote/task/weather-remote' )
+const mapRemote = require( 'goatstone/remote/task/map' )
 
-function Cloud(){
-    this.owKey = 'owkey'
-}
+function Cloud(){}
 Cloud.prototype.weather = function(){
-
     return weatherRemote.getPromise()
+}
+Cloud.prototype.map = function(){
+	return new Promise( function( res, rej ){
+		mapRemote.getMap()
+		res( 1 )
+	})
 }
 Cloud.prototype.twitter = function(){
     return new Promise( function ( resolve, reject ) {
