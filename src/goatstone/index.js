@@ -1,4 +1,4 @@
- goatstone.index   */
+/* goatstone.index   */
 'strict mode'   
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
@@ -36,10 +36,3 @@ window.onload = function() {
 			{ title:'RxHello', message:'Welcome to RxHello' }		 
 	} )
 }
-/*  
-Event Interface 
-{ type, name, data }
-
-Usage
-aStream.onNext ( EvnentObj.get( 'content', 'intro', data ) )
-
