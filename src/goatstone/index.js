@@ -9,22 +9,32 @@ const appStream = FuncSubject.create()
 const controlStream = require( 'goatstone/stream/control' )( appStream )
 // ui
 const Control = require( 'goatstone/ui/control' )( controlStream ) 
-const Message = require( 'goatstone/ui/message' )( appStream )
+const Message = require( 'goatstone/ui/message-display' )( appStream )
+const WeatherDisplay = require( 'goatstone/ui/weather-display' )( appStream )
 
 require( 'babel-polyfill' ) 
 
 window.onload = function() {
+	ReactDOM.render( <WeatherDisplay />, 
+		document.getElementById( 'weather-display' ) ) 
 	ReactDOM.render( <Control />, 
 		document.getElementById( 'control' ) ) 
 	ReactDOM.render( <Message />, 
 		document.getElementById( 'message' ) ) 
 
+	controlStream.onNext( { type: 'display', name: 'intro', data:'hello' } )
+
+	controlStream.onNext(
+	{
+		type:'getData',
+		name: 'weather'
+	}
+	)
 	appStream.onNext( {
-		type: 'content',
+		type: 'message',
 		name: 'intro',
-		data: [
-			{ label:'Welcome', value:'RxHello'}
-		]
+		data:  
+			{ title:'RxHello', message:'Welcome to RxHello' }		 
 	} )
 }
 /*  

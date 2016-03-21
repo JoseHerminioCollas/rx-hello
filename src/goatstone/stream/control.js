@@ -39,7 +39,7 @@ module.exports = function (appStream) {
 
     // display al events for debug TODO  remove this debug code
     controlStream.subscribe( x =>{
-        console.log( 'all events for control - - 2 ', x )
+        console.log( 'all events for control - - 3 ', x )
     }, oCBacks.error, oCBacks.complete )
 
     return controlStream

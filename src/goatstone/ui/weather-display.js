@@ -1,11 +1,11 @@
-/* goatstone.ui.Message  */
+/* goatstone.ui.WeatherDisplay  */
 const React = require( 'react' )
 var StateStreamMixin = require('rx-react').StateStreamMixin;
 const Rx = require( 'rx' ) 
 
 module.exports = function( appStream ){
 
-	var Message = React.createClass({
+	return React.createClass({
 		mixins: [ StateStreamMixin ],
 		getStateStream: function () {
 			return appStream
@@ -32,5 +32,4 @@ module.exports = function( appStream ){
 	 		return <div> {this.state.a} { items } </div>
 	 	}
 	 })  
-	return Message
 }

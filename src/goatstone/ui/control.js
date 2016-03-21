@@ -30,7 +30,7 @@ module.exports = function( controlStream ){
 				} )
 			}, err => err, () => { return 'complete' } )
 		},
-		render: function() { 
+		render: function() {
 			return 	<div onClick={ this.clickHandler }>
 						{ weather } { start } { stop } 
 					</div>
