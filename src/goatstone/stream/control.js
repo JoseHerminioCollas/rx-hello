@@ -15,7 +15,8 @@ module.exports = function (appStream) {
     controlStream
         .filter(x => x.type === 'getData' && x.name === 'weather')
         .flatMap( x => { 
-            return Rx.Observable.fromPromise( cloud.weather() ) 
+            // console.log('x.data', x.data)
+            return Rx.Observable.fromPromise( cloud.weather( x.data ) ) 
         } )
         .subscribe( x => {
             cloud.map() 

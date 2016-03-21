@@ -27,7 +27,8 @@ window.onload = function() {
 	controlStream.onNext(
 	{
 		type:'getData',
-		name: 'weather'
+		name: 'weather',
+		data: { city: 'London' } // TODO set this on the UI
 	}
 	)
 	appStream.onNext( {

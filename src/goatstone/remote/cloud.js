@@ -6,8 +6,10 @@ const weatherRemote = require( 'goatstone/remote/task/weather-remote' )
 const mapRemote = require( 'goatstone/remote/task/map' )
 
 function Cloud(){}
-Cloud.prototype.weather = function(){
-    return weatherRemote.getPromise()
+Cloud.prototype.weather = function( config ){
+	// console.log('config', config )
+	const c = Object.assign( {}, config )
+    return weatherRemote.getPromise( c )
 }
 Cloud.prototype.map = function(){
 	return new Promise( function( res, rej ){
