@@ -1,4 +1,4 @@
-/* goatstone.index   */
+ goatstone.index   */
 'strict mode'   
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
@@ -22,8 +22,6 @@ window.onload = function() {
 	ReactDOM.render( <Message />, 
 		document.getElementById( 'message' ) ) 
 
-	controlStream.onNext( { type: 'display', name: 'intro', data:'hello' } )
-
 	controlStream.onNext(
 	{
 		type:'getData',
@@ -45,4 +43,3 @@ Event Interface
 Usage
 aStream.onNext ( EvnentObj.get( 'content', 'intro', data ) )
 
-*/

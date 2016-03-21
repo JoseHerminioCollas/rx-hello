@@ -2,64 +2,73 @@
 'strict mode'   
 const React = require( 'react' )
 const FuncSubject = require('rx-react').FuncSubject 
-const cs = [
-['New York', 'new-york'],
-['Seattle', 'seattle'],
-['Los Angeles', 'los-angeles'],
-['London', 'london' ],
+
+// TODO get this from a service
+const cityDataFromService = [
+	['New York', 'new-york'],
+	['Seattle', 'seattle'],
+	['Los Angeles', 'los-angeles'],
+	['London', 'london' ] 
 ]
-const csM = cs.map( ( e, i ) => {
-	return React.createElement("option", 
-	{ 
-		value: e[1]
-	}, 
-	e[0])  
-})
+
 module.exports = function( controlStream ){
 
-	var city = 'london'
-	const cities = React.createElement( 
-		'select', 
-		{ 
-			'defaultValue': city,
-			'data-type': 'getData', 
-			'data-name': 'weather' 
-		}, 
-		...csM
-		) 
-	const start = React.createElement( 'button', { 
-		'data-type': 'control', 
-		'data-name': 'start' 
-	}, 'Start' ) 
-	const stop = React.createElement( 'button', { 
-		'data-type': 'control', 
-		'data-name': 'stop' 
-	}, 'Stop' ) 
-	var Control = React.createClass( { 
-		componentWillMount: function(){						
-			this.changeHandler = function( x ){
-				city = x.target.value
-			}  
-			this.clickHandler = FuncSubject.create( function(e){
-				// TODO call a seperate function, choke events
-				return { 
-					type: e.target.dataset.type, 
-					name: e.target.dataset.name, 
-					data: { city }
+	return React.createClass( {
+		getInitialState: function(){
+			return { city: 'london' }
+		},
+		componentWillMount: function(){
+			// button handler
+			this.buttonHandler = FuncSubject.create( x => {
+				return {
+					name: x.target.dataset.name,
+					type: x.target.dataset.type
 				}
 			})
-			this.clickHandler.subscribe( x => {				
+			this.buttonHandler.subscribe( x => {
 				controlStream.onNext( x )
-			}, err => err, () => { return 'complete' } )
+			}, err => {throw err}, () => { return 'complete' } )
+			// change handler
+			this.changeHandler = FuncSubject.create( x => {
+				const cityValue = x.target.value
+				this.setState( {city: cityValue } )
+				return {
+					name: x.target.dataset.name,
+					type: x.target.dataset.type,
+					data: { city: cityValue }
+				}
+			})
+			this.changeHandler.subscribe( x =>{
+				controlStream.onNext( x )
+			}, err => {throw err}, () => { return 'complete' } )
+			// UI elements
+			this.start = React.createElement( 'button', {
+					'data-type': 'control',
+					'data-name': 'start',
+					onClick: this.buttonHandler
+				}, 'Start' )
+			this.stop = React.createElement( 'button', {
+					'data-type': 'control',
+					'data-name': 'stop',
+					onClick: this.buttonHandler
+				}, 'Stop')
+			this.cities = React.createElement( 'select', {
+					'defaultValue': this.state.city,
+					'data-type': 'getData',
+					'data-name': 'weather',
+					onChange: x => this.changeHandler
+				},
+				...cityDataFromService.map( ( e, i ) => {
+						return React.createElement( "option", { value: e[1] }, e[0] )
+					} )
+				)
 		},
 		render: function() {
 			return 	<div 
-						onClick={ this.clickHandler } 
-						onChange={ this.changeHandler }>
-						{ cities }						
-						   { start } { stop } 
+						onClick={ this.clickHandler }
+						onChange={ this.changeHandler }> 
+						{ this.cities } { this.start } { this.stop }
 					</div>
 		} 
 	})  
-	return Control
 }

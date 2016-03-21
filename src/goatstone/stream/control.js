@@ -15,10 +15,13 @@ module.exports = function (appStream) {
     controlStream
         .filter(x => x.type === 'getData' && x.name === 'weather')
         .flatMap( x => { 
+            /*
+            x.data {object} { city: {string} }
+            */
             return Rx.Observable.fromPromise( cloud.weather( x.data ) ) 
         } )
         .subscribe( x => {
-            // console.log( 'x.data', x.data.coord )
+            console.log( 'x.data', x.data.coord )
             cloud.map({
                 center:
                 { 
