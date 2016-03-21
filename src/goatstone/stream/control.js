@@ -15,11 +15,15 @@ module.exports = function (appStream) {
     controlStream
         .filter(x => x.type === 'getData' && x.name === 'weather')
         .flatMap( x => { 
-            // console.log('x.data', x.data)
             return Rx.Observable.fromPromise( cloud.weather( x.data ) ) 
         } )
         .subscribe( x => {
-            cloud.map() 
+            // console.log( 'x.data', x.data.coord )
+            cloud.map({
+                center:
+                { 
+                    lat:x.data.coord.lat, lng: x.data.coord.lon 
+                }}) 
             appStream.onNext({
                 type: 'content',
                 data: format.JSONtoContentList( x.data )

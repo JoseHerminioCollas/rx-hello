@@ -16,12 +16,12 @@ const gm = {
 	zoon: 8,
 	el: document.querySelector('#map'),
 	getMap: x => {
-	const el = document.querySelector('#map')
+		const el = document.querySelector('#map')
 		new google.maps.Map( gm.el,  
 		{
-    	      center: {lat: 47.6, lng: -122.33 },
-        	  zoom: 8
-        	} ) 
+			center: {lat: x.center.lat, lng: x.center.lng },
+			zoom: 8
+    	} ) 
 	}
 
 }
