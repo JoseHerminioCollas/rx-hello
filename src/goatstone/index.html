@@ -11,13 +11,15 @@ body{
 #portal{
 	display: flex;
 	position: absolute;
-	width: 100%;
+	width: 97%;
+	/*padding: 12px;*/
 	height: 85%;
 }
 #map{
 	border-radius: 13px;
 	width: 60%;
 	min-height: 300px;
+	margin: 12px;
 }
 #weather-display{
 	display: flex;
@@ -42,27 +44,36 @@ body{
 	border-radius: 3px;
 }
 #control{
+	font-size: 1.2em;
 	position: fixed;
 	left: 2%;
 	bottom: 2%;
-	padding: 7px;
-	margin: 7px;
+	padding: 12px;
+	margin: 12px;
 	border-radius: 7px;
 	background-color: hsla( 160, 50%, 50%, 0.5 );
 }
 #control button{
+	font-size: 1.0em;
+	margin: 3px;
+	border-radius: 3px;
 	background-color: hsla( 100, 50%, 50%, 0.9 );	
 }
 #control select{
+	font-size: 1.1em;
+	margin: 3px;
+	border-radius: 3px;
 	background-color: hsla( 100, 50%, 50%, 0.9 );	
 }
 #message{
+	font-size: 1.2em;
 	position: fixed;
 	right: 2%;
 	bottom: 2%;
-	max-height: 12%;
+	padding: 6px;
+	min-width: 100px;
 	border-radius: 7px;
-	background-color: hsla( 160, 50%, 50%, 0.5 );
+	background-color: hsla( 160, 50%, 50%, 0.9 );
 }
 </style>
 </head>

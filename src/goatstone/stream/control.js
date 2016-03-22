@@ -2,20 +2,15 @@
 'strict mode'
 const Rx = require('rx')
 const FuncSubject = require('rx-react').FuncSubject
-const Cloud = require('goatstone/remote/cloud')
 const Format = require('goatstone/text/format')
-const oCBacks = require('goatstone/util/o-call-backs')
 const Ticker = require( 'goatstone/time/ticker' )
+
+const oCBacks = require('goatstone/util/o-call-backs')
 const format = new Format()
-const cloud = new Cloud({owKey: 'abc'})
 const controlStream = FuncSubject.create()
 const ticker = new Ticker( )
-const cities = [
-'new-york', 'paris', 'rome',   'chicago', 'ontario', 'madrid', 'denver',
-'helsinki', 'seattle', 'cleveland', 'tokyo' 
-  ]
 
-module.exports = function (appStream) {
+module.exports = function ( appStream, cloud ) {
     // get weather data
     controlStream
         .filter(x => x.type === 'getData' && x.name === 'weather')
@@ -32,11 +27,15 @@ module.exports = function (appStream) {
                     lat:x.data.coord.lat, lng: x.data.coord.lon 
                 }}) 
             appStream.onNext({
+                type: 'message',
+                data: {message: x.data.name }
+            })
+            appStream.onNext({
                 type: 'content',
                 data: format.JSONtoContentList( x.data )
             })
         }, oCBacks.error, oCBacks.complete )
-    // control the state, start it
+    // control the state, start     
     controlStream
        .filter( x => x.type === 'control' && x.name === 'start' )
         .subscribe( x => {
@@ -46,7 +45,7 @@ module.exports = function (appStream) {
                     const dataP = {
                         type: 'getData',
                         name: 'weather',
-                        data: { city: cities[ x ] }
+                        data: { city: cloud.city()[ x ][ 1 ] }
                     }
                     controlStream.onNext( dataP )  
                 } 

@@ -4,15 +4,7 @@ const React = require( 'react' )
 const Rx = require('rx')
 const FuncSubject = require('rx-react').FuncSubject 
 
-// TODO get this from a service
-const cityDataFromService = [
-	['New York', 'new-york'],
-	['Seattle', 'seattle'],
-	['Los Angeles', 'los-angeles'],
-	['London', 'london' ] 
-]
-
-module.exports = function( controlStream ){
+module.exports = function( controlStream, cityData ){
 
 	return React.createClass( {
 		getInitialState: function(){
@@ -59,7 +51,7 @@ module.exports = function( controlStream ){
 					'data-name': 'weather',
 					onChange: x => this.changeHandler
 				},
-				...cityDataFromService.map( ( e, i ) => {
+				...cityData.map( ( e, i ) => {
 						return React.createElement( "option", { value: e[1] }, e[0] )
 					} )
 				)

@@ -11,7 +11,7 @@ Ticker.prototype.onTick = function( cb ){
 Ticker.prototype._tick = function( i ){
 	if ( !this.isRunning )return
 	this.cb( i )
-	this.isRunning = ( i > 10 )? false : this.isRunning // 10X max times
+	this.isRunning = ( i > 60 )? false : this.isRunning // 10X max times
 	if( this.isRunning ){
 		setTimeout( x => {
 			++i
