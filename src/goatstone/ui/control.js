@@ -1,6 +1,7 @@
 /* goatstone.ui.control */
 'strict mode'   
 const React = require( 'react' )
+const Rx = require('rx')
 const FuncSubject = require('rx-react').FuncSubject 
 
 // TODO get this from a service
@@ -62,6 +63,28 @@ module.exports = function( controlStream ){
 						return React.createElement( "option", { value: e[1] }, e[0] )
 					} )
 				)
+				const cities = [
+				'new-york', 'paris', 'rome',   'chicago', 
+				'helsinki', 'seattle', 'cleveland', 'tokyo' 
+				  ]
+
+					function tick( i ){
+							const evntObj = {
+								type: 'getData',
+								name: 'weather',
+								data: { city: cities[ i ] }
+							}
+							controlStream.onNext( evntObj )
+							console.log('t', i,  cities[ i ] )
+						if( i < cities.length ){ 
+						    setTimeout(x=>{ 
+						    	console.log('ressses')
+						    	tick( ++i )
+						    }, 5000)						
+						 }
+					}
+					tick(0)
+
 		},
 		render: function() {
 			return 	<div 

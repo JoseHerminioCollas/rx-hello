@@ -36,13 +36,13 @@ module.exports = function (appStream) {
     controlStream
        .filter( x => x.type === 'control' && x.name === 'start' )
         .subscribe( x => {
-            console.log( 'start', x )
+            //console.log( 'start', x )
         }, oCBacks.error, oCBacks.complete )
     // control the state, stop it
     controlStream
        .filter( x => x.type === 'control' && x.name === 'stop' )
         .subscribe( x => {
-            console.log( 'stop', x )
+            //console.log( 'stop', x )
         }, oCBacks.error, oCBacks.complete )
 
     // display al events for debug TODO  remove this debug code
