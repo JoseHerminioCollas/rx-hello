@@ -8,6 +8,7 @@ const wr =  {
 	url: 'http://api.openweathermap.org/data/2.5/weather',
 	q: 'London', 
 	getPromise: x => {
+		wr.q = x.city || wr.q
 		return axios.get(
 			`${wr.url}?q=${wr.q}&appid=${wr.id}` 
 			)

@@ -1,4 +1,4 @@
-'strict mode'
+'use strict'
 const Rx = require( 'rx' )
 const ModifyVal = require( 'goatstone/util/modify-val' )
 const numberYield = require( 'goatstone/func-stream/number-yield' )

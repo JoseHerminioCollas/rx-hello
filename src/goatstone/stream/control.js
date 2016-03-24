@@ -1,39 +1,69 @@
 /* goatstone.stream.control */
-'strict mode'
-
+'use strict'
 const Rx = require('rx')
 const FuncSubject = require('rx-react').FuncSubject
-const Cloud = require('goatstone/remote/cloud')
 const Format = require('goatstone/text/format')
+const Ticker = require( 'goatstone/time/ticker' )
+
 const oCBacks = require('goatstone/util/o-call-backs')
-
 const format = new Format()
-const cloud = new Cloud({owKey: 'abc'})
 const controlStream = FuncSubject.create()
+const ticker = new Ticker( )
 
-module.exports = function (appStream) {
+module.exports = function ( appStream, cloud ) {
 
+    // get weather data
     controlStream
-        .filter(x => x.type === 'click' && x.target.name === 'weather')
-        .flatMap( x => Rx.Observable.fromPromise( cloud.weather() ) )
+        .filter(x => x.type === 'getData' && x.name === 'weather')
+        .flatMap( x => { 
+            /*
+            x.data {object} { city: {string} }
+            */
+            return Rx.Observable.fromPromise( cloud.weather( x.data ) ) 
+        } )
         .subscribe( x => {
+            cloud.map({
+                center:
+                { 
+                    lat:x.data.coord.lat, lng: x.data.coord.lon 
+                }}) 
+            appStream.onNext({
+                type: 'message',
+                data: {message: x.data.name }
+            })
             appStream.onNext({
                 type: 'content',
                 data: format.JSONtoContentList( x.data )
             })
         }, oCBacks.error, oCBacks.complete )
-
+    // control the state, start     
     controlStream
-        .filter( x => x.type === 'click' && x.target.name === 'stop' )
+       .filter( x => x.type === 'control' && x.name === 'start' )
         .subscribe( x => {
-            console.log( ` stop source ${x}`, x )
-        }, oCBacks.err, oCBacks.complete )
 
+            ticker.onTick( x => {
+                    const dataP = {
+                        type: 'getData',
+                        name: 'weather',
+                        data: { city: cloud.city()[ x ][ 1 ] }
+                    }
+                    controlStream.onNext( dataP )  
+                } 
+             )
+            ticker.start()
+
+        }, oCBacks.error, oCBacks.complete )
+    // control the state, stop it
     controlStream
-        .filter( x => x.type === 'click' && x.target.name === 'start')
+       .filter( x => x.type === 'control' && x.name === 'stop' )
         .subscribe( x => {
-            console.log( `start ${x}` )
-        }, oCBacks.err, oCBacks.complete )
+            ticker.stop()
+        }, oCBacks.error, oCBacks.complete )
+
+    // display al events for debug TODO  remove this debug code
+    controlStream.subscribe( x =>{
+        //console.log( 'all events for control - - 3 ', x )
+    }, oCBacks.error, oCBacks.complete )
 
     return controlStream
 }
