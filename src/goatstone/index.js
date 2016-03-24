@@ -11,7 +11,7 @@ const cloud = new Cloud({owKey: 'abc'})
 const appStream = FuncSubject.create()
 const controlStream = require( 'goatstone/stream/control' )( appStream, cloud )
 // ui
-const Control = require( 'goatstone/ui/control' )( controlStream, cloud.city() ) 
+const Control = require( 'goatstone/ui/control' )( controlStream, appStream, cloud.city() )
 const Message = require( 'goatstone/ui/message-display' )( appStream )
 const WeatherDisplay = require( 'goatstone/ui/weather-display' )( appStream )
 

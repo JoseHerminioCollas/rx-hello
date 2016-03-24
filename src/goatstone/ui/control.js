@@ -2,10 +2,24 @@
 'use strict'
 const React = require( 'react' )
 const FuncSubject = require('rx-react').FuncSubject
+var StateStreamMixin = require('rx-react').StateStreamMixin;
 
-module.exports = function( controlStream, cityData ){
+module.exports = function( controlStream, appStream, cityData ){
 
 	return React.createClass( {
+		mixins: [ StateStreamMixin ],
+		getStateStream: function () {
+			return appStream
+				.filter( function( evnt ){
+					return evnt.type === 'onLoad' && evnt.name === 'weather'
+				} )
+				.map( function ( x ) {
+					console.log('xxxxx', x)
+					return {
+						city: x.data   //x.data.message.value
+					}
+				} )
+		},
 		getInitialState: function(){
 			return { 
 				city: 'london',
@@ -23,8 +37,8 @@ module.exports = function( controlStream, cityData ){
 				const cityValue = x.target.value
 				this.setState( {city: cityValue } )
 				return {
-					name: x.target.dataset.name,
-					type: x.target.dataset.type,
+					name: 'getData',
+					type: 'weather',
 					data: { city: cityValue }
 				}
 			})
@@ -32,10 +46,9 @@ module.exports = function( controlStream, cityData ){
 				controlStream.onNext( x )
 			}, err => {throw err}, () => { return 'complete' } )
 
+			this.C = React.createFactory( 'select' )
 			this.cities = React.createElement( 'select', {
 					'defaultValue': this.state.city,
-					'data-type': 'getData',
-					'data-name': 'weather',
 					onChange: x => this.changeHandler
 				},
 				...cityData.map( ( e ) => {
@@ -71,10 +84,18 @@ module.exports = function( controlStream, cityData ){
 			this.Stop = React.createFactory('button' )
 		},
 		render: function() {
-			return 	<div
-						onChange={ this.changeHandler } >
-						{ this.state.city }
-						{ this.cities }
+			return 	<div>
+
+				{this.C(
+					{
+						'value': this.state.city,
+						onChange: this.changeHandler
+					},
+					...cityData.map( ( e ) => {
+						return React.createElement( "option", { value: e[1] }, e[0] )
+					} )
+
+				)}
 						{
 							this.Start( {
 								disabled: this.state.start.isDisabled,

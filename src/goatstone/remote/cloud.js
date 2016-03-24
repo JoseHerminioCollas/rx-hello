@@ -28,6 +28,15 @@ Cloud.prototype.weather = function( config ){
 	const c = Object.assign( {}, config )
     return weatherRemote.getPromise( c )
 }
+Cloud.prototype.weatherR = function( config ){
+	return new Promise( function( res, rej ){
+		const c = Object.assign( {}, config )
+		 weatherRemote.getPromise( c )
+			 .then( x => {
+				 res( { req: config, res: x } )
+		 }, err=>{throw err}, ()=>console.log('cmplt') )
+	})
+}
 Cloud.prototype.map = function( x ){
 	return new Promise( function( res, rej ){
 		mapRemote.getMap( x )

@@ -18,22 +18,29 @@ module.exports = function ( appStream, cloud ) {
         .flatMap( x => { 
             /*
             x.data {object} { city: {string} }
+            cloud.weatherMap()
+            returns { request:{}, returnJSON:{} }
             */
-            return Rx.Observable.fromPromise( cloud.weather( x.data ) ) 
+            return Rx.Observable.fromPromise( cloud.weatherR( x.data ) )
         } )
         .subscribe( x => {
             cloud.map({
                 center:
                 { 
-                    lat:x.data.coord.lat, lng: x.data.coord.lon 
-                }}) 
+                    lat:x.res.data.coord.lat, lng: x.res.data.coord.lon
+                }})
+            appStream.onNext({
+                type: 'onLoad',
+                name: 'weather',
+                data: x.req.city
+            })
             appStream.onNext({
                 type: 'message',
-                data: {message: x.data.name }
+                data: {message: x.res.data.name }
             })
             appStream.onNext({
                 type: 'content',
-                data: format.JSONtoContentList( x.data )
+                data: format.JSONtoContentList( x.res.data )
             })
         }, oCBacks.error, oCBacks.complete )
     // control the state, start     
