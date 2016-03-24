@@ -1,5 +1,5 @@
 /* goatstone.index   */
-'strict mode'   
+'use strict'
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
 const FuncSubject = require('rx-react').FuncSubject 

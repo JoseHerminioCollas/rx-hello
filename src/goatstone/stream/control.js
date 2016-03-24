@@ -1,5 +1,5 @@
 /* goatstone.stream.control */
-'strict mode'
+'use strict'
 const Rx = require('rx')
 const FuncSubject = require('rx-react').FuncSubject
 const Format = require('goatstone/text/format')
@@ -11,6 +11,7 @@ const controlStream = FuncSubject.create()
 const ticker = new Ticker( )
 
 module.exports = function ( appStream, cloud ) {
+
     // get weather data
     controlStream
         .filter(x => x.type === 'getData' && x.name === 'weather')
@@ -40,7 +41,6 @@ module.exports = function ( appStream, cloud ) {
        .filter( x => x.type === 'control' && x.name === 'start' )
         .subscribe( x => {
 
-            ticker.start()
             ticker.onTick( x => {
                     const dataP = {
                         type: 'getData',
@@ -50,6 +50,8 @@ module.exports = function ( appStream, cloud ) {
                     controlStream.onNext( dataP )  
                 } 
              )
+            ticker.start()
+
         }, oCBacks.error, oCBacks.complete )
     // control the state, stop it
     controlStream

@@ -1,27 +1,24 @@
 /* goatstone.ui.control */
-'strict mode'   
+'use strict'
 const React = require( 'react' )
-const Rx = require('rx')
-const FuncSubject = require('rx-react').FuncSubject 
+const FuncSubject = require('rx-react').FuncSubject
 
 module.exports = function( controlStream, cityData ){
 
 	return React.createClass( {
 		getInitialState: function(){
-			return { city: 'london' }
+			return { 
+				city: 'london',
+				start: {
+					isDisabled: false 
+				},
+				stop: {
+					isDisabled: true
+				}
+			}
 		},
 		componentWillMount: function(){
-			// button handler
-			this.buttonHandler = FuncSubject.create( x => {
-				return {
-					name: x.target.dataset.name,
-					type: x.target.dataset.type
-				}
-			})
-			this.buttonHandler.subscribe( x => {
-				controlStream.onNext( x )
-			}, err => {throw err}, () => { return 'complete' } )
-			// change handler
+
 			this.changeHandler = FuncSubject.create( x => {
 				const cityValue = x.target.value
 				this.setState( {city: cityValue } )
@@ -34,33 +31,64 @@ module.exports = function( controlStream, cityData ){
 			this.changeHandler.subscribe( x =>{
 				controlStream.onNext( x )
 			}, err => {throw err}, () => { return 'complete' } )
-			// UI elements
-			this.start = React.createElement( 'button', {
-					'data-type': 'control',
-					'data-name': 'start',
-					onClick: this.buttonHandler
-				}, 'Start' )
-			this.stop = React.createElement( 'button', {
-					'data-type': 'control',
-					'data-name': 'stop',
-					onClick: this.buttonHandler
-				}, 'Stop')
+
 			this.cities = React.createElement( 'select', {
 					'defaultValue': this.state.city,
 					'data-type': 'getData',
 					'data-name': 'weather',
 					onChange: x => this.changeHandler
 				},
-				...cityData.map( ( e, i ) => {
+				...cityData.map( ( e ) => {
 						return React.createElement( "option", { value: e[1] }, e[0] )
 					} )
 				)
+
+			this.StartHandler = FuncSubject.create( () => {
+				return {
+					name: 'start',
+					type: 'control'
+				}
+			} )
+			this.StartHandler.subscribe( x => {
+				this.setState( { start: { isDisabled: true } } )
+				this.setState( { stop: { isDisabled: false } } )
+				controlStream.onNext( x )
+			}, err=>{throw err}, ()=>console.log('complete') )
+
+			this.StopHandler = FuncSubject.create( () => {
+				return {
+					name: 'stop',
+					type: 'control'
+				}
+			} )
+			this.StopHandler.subscribe( x => {
+				this.setState( { stop: { isDisabled: true } } )
+				this.setState( { start: { isDisabled: false } } )
+				controlStream.onNext( x )
+			}, err=>{throw err}, ()=>console.log('complete') )
+
+			this.Start = React.createFactory('button')
+			this.Stop = React.createFactory('button' )
 		},
 		render: function() {
-			return 	<div 
-						onClick={ this.clickHandler }
-						onChange={ this.changeHandler }> 
-						{ this.cities } { this.start } { this.stop }
+			return 	<div
+						onChange={ this.changeHandler } >
+						{ this.state.city }
+						{ this.cities }
+						{
+							this.Start( {
+								disabled: this.state.start.isDisabled,
+								onClick: this.StartHandler
+							},
+								'Start' )
+						}
+						{
+							this.Stop( {
+								disabled: this.state.stop.isDisabled,
+								onClick: this.StopHandler
+							},
+								'Stop' )
+						}
 					</div>
 		} 
 	})  

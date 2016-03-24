@@ -6,7 +6,6 @@ function Ticker(){
 }
 Ticker.prototype.onTick = function( cb ){
 	this.cb = cb
-	this._tick( 0 )
 }
 Ticker.prototype._tick = function( i ){
 	if ( !this.isRunning )return
@@ -23,7 +22,9 @@ Ticker.prototype.stop = function(){
 	this.isRunning = false
 }
 Ticker.prototype.start = function(){
+	if ( this.isRunning ) return
 	this.isRunning = true
+	this._tick( 0 )
 }
 
 module.exports = Ticker
