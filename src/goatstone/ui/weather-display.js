@@ -21,7 +21,12 @@ module.exports = function( appStream ){
 			width: '100%'
 		},
 		getInitialState: function() {
-		    return { message: 'init message', title: 'init title', messageArr: [], opacity:0.0}
+		    return {
+				message: 'init message',
+				title: 'init title',
+				messageArr: [],
+				opacity: 0.0
+			}
 		},
 	 	render:  function() {
 	 		const items = this.state.messageArr.map( function( e, i ){

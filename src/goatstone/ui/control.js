@@ -7,30 +7,41 @@ module.exports = function( controlStream, appStream, cityData  ){
 
 	return React.createClass( {
 		getInitialState: function(){
-			return { 
+			return {
 				city: 'london',
 				start: {
-					isDisabled: false 
+					isDisabled: false
 				},
 				stop: {
 					isDisabled: true
-				}
+				},
+                opacity: 0.0
 			}
 		},
+        style: {
+            fontSize: '1.2em',
+            transition: 'opacity 9s',
+            borderRadius: '13px',
+            backgroundColor: 'hsla( 200, 20%, 50%, 0.9 )',
+            padding: '12px'
+        },
 		componentWillMount: function(){
 
 			appStream
-			.filter( x => x.type === 'onLoad' && x.name === 'weather' )
-			.subscribe( x => {
-				this.setState( { 'city': x.data } )
-			}, err=>{throw err}, ()=>{console.log('cmplt')})
+                .filter( x => x.type === 'onLoad' && x.name === 'weather' )
+                .subscribe( x => {
+                    this.setState( { 'city': x.data, opacity: 1.0  } )
+                }, err=>{throw err}, ()=>{console.log('cmplt')})
 
 			appStream
-			.filter( x =>  x.type === 'stateChange' && x.name === 'stopped' )
-			.subscribe( () => {
-				this.setState( { start : { isDisabled: false } } )
-				this.setState( { stop : { isDisabled: true } } )
-			}, err=>{throw err}, ()=>{console.log('cmplt')})
+                .filter( x =>  x.type === 'stateChange' && x.name === 'stopped' )
+                .subscribe( () => {
+                    this.setState( {
+                        start : { isDisabled: false },
+                        stop : { isDisabled: true }
+                    } )
+                    this.setState( { stop : { isDisabled: true } } )
+                }, err=>{throw err}, ()=>{console.log('cmplt')})
 
 			this.ChangeHandler = FuncSubject.create( x => {
 				const cityValue = x.target.value
@@ -76,7 +87,7 @@ module.exports = function( controlStream, appStream, cityData  ){
 			this.Stop = React.createFactory('button' )
 		},
 		render: function() {
-			return 	<div>
+			return 	<div style={ { opacity: this.state.opacity, ...this.style } } >
 
 				{this.City(
 					{
@@ -103,6 +114,6 @@ module.exports = function( controlStream, appStream, cityData  ){
 								'Stop' )
 						}
 					</div>
-		} 
-	})  
+		}
+	})
 }
