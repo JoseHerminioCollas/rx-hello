@@ -1,12 +1,11 @@
 /* goatstone.cloud.cloud */
 'use strict'
-const Rx = require( 'rx' )
 const async = require( "async" )
 const weatherRemote = require( 'goatstone/remote/task/weather-remote' )
 const mapRemote = require( 'goatstone/remote/task/map' )
 const cities = [
-	['New York', 'new-york'],
 	['Seattle', 'seattle'],
+	['New York', 'new-york'],
 	['Los Angeles', 'los-angeles'],
 	['London', 'london' ],
 	['Paris', 'paris'],
@@ -17,7 +16,7 @@ const cities = [
 	['Helsinki', 'helsinki'],
 	['Tokyo', 'tokyo'],
 	['Cleveland', 'cleveland'],
-	['Chicago', 'Chicagoago']
+	['Chicago', 'chicago']
 ]
 
 function Cloud(){}
@@ -27,6 +26,15 @@ config {object} { city: {string} }
 Cloud.prototype.weather = function( config ){
 	const c = Object.assign( {}, config )
     return weatherRemote.getPromise( c )
+}
+Cloud.prototype.weatherR = function( config ){
+	return new Promise( function( res, rej ){
+		const c = Object.assign( {}, config )
+		 weatherRemote.getPromise( c )
+			 .then( x => {
+				 res( { req: config, res: x } )
+		 }, err=>{throw err}, ()=>console.log('cmplt') )
+	})
 }
 Cloud.prototype.map = function( x ){
 	return new Promise( function( res, rej ){

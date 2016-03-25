@@ -3,7 +3,7 @@
 const React = require( 'react' )
 const FuncSubject = require('rx-react').FuncSubject
 
-module.exports = function( controlStream, cityData ){
+module.exports = function( controlStream, appStream, cityData  ){
 
 	return React.createClass( {
 		getInitialState: function(){
@@ -19,29 +19,34 @@ module.exports = function( controlStream, cityData ){
 		},
 		componentWillMount: function(){
 
-			this.changeHandler = FuncSubject.create( x => {
+			appStream
+			.filter( x => x.type === 'onLoad' && x.name === 'weather' )
+			.subscribe( x => {
+				this.setState( { 'city': x.data } )
+			}, err=>{throw err}, ()=>{console.log('cmplt')})
+
+			appStream
+			.filter( x =>  x.type === 'stateChange' && x.name === 'stopped' )
+			.subscribe( () => {
+				this.setState( { start : { isDisabled: false } } )
+				this.setState( { stop : { isDisabled: true } } )
+			}, err=>{throw err}, ()=>{console.log('cmplt')})
+
+			this.ChangeHandler = FuncSubject.create( x => {
 				const cityValue = x.target.value
 				this.setState( {city: cityValue } )
+				controlStream.onNext( { type:'control', name: 'stop' } )
 				return {
-					name: x.target.dataset.name,
-					type: x.target.dataset.type,
+					type: 'getData',
+					name: 'weather',
 					data: { city: cityValue }
 				}
 			})
-			this.changeHandler.subscribe( x =>{
+			this.ChangeHandler.subscribe( x =>{
 				controlStream.onNext( x )
 			}, err => {throw err}, () => { return 'complete' } )
 
-			this.cities = React.createElement( 'select', {
-					'defaultValue': this.state.city,
-					'data-type': 'getData',
-					'data-name': 'weather',
-					onChange: x => this.changeHandler
-				},
-				...cityData.map( ( e ) => {
-						return React.createElement( "option", { value: e[1] }, e[0] )
-					} )
-				)
+			this.City = React.createFactory( 'select' )
 
 			this.StartHandler = FuncSubject.create( () => {
 				return {
@@ -71,10 +76,18 @@ module.exports = function( controlStream, cityData ){
 			this.Stop = React.createFactory('button' )
 		},
 		render: function() {
-			return 	<div
-						onChange={ this.changeHandler } >
-						{ this.state.city }
-						{ this.cities }
+			return 	<div>
+
+				{this.City(
+					{
+						'value': this.state.city,
+						onChange: this.ChangeHandler
+					},
+					...cityData.map( ( e ) => {
+						return React.createElement( "option", { value: e[1] }, e[0] )
+					} )
+
+				)}
 						{
 							this.Start( {
 								disabled: this.state.start.isDisabled,
