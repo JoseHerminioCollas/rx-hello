@@ -2,7 +2,7 @@
 'use strict'
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
-const FuncSubject = require('rx-react').FuncSubject 
+//const FuncSubject = require('rx-react').FuncSubject
 //const oCBacks = require('goatstone/util/o-call-backs')
 const Cloud = require('goatstone/remote/cloud')
 const cloud = new Cloud({owKey: 'abc'})
@@ -12,7 +12,7 @@ const Ticker = require( 'goatstone/time/ticker' )
 const ticker = new Ticker( )
 var cityI = cityGen( cloud.city() )
 // streams
-const appStream = FuncSubject.create()
+const appStream = require( 'goatstone/stream/application' )
 const controlStream = require( 'goatstone/stream/control' )( appStream, cloud, ticker )
 // ui
 const Control = require( 'goatstone/ui/control' )( controlStream, appStream, cloud.city() )
@@ -51,12 +51,11 @@ window.onload = function() {
 		data: { city: cityI.next().value }
 	}
 	)
-	appStream.onNext( {
-		type: 'message',
-		name: 'intro',
-		data:  
-			{ title:'RxHello', message:'Welcome to RxHello' }		 
-	} )
-
-	document.querySelector('#map').style.opacity = 1.0
+	appStream.onNext({
+			type: 'stateChange',
+			name: 'loaded'
+		}
+	)
+	// direct DOM manipulation to achieve the fade in effect for Google Maps
+	document.querySelector( '#map' ).style.opacity = 1.0
 }
