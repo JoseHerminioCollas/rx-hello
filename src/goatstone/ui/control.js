@@ -2,24 +2,11 @@
 'use strict'
 const React = require( 'react' )
 const FuncSubject = require('rx-react').FuncSubject
-var StateStreamMixin = require('rx-react').StateStreamMixin;
+//var StateStreamMixin = require('rx-react').StateStreamMixin;
 
 module.exports = function( controlStream, appStream, cityData ){
 
 	return React.createClass( {
-		mixins: [ StateStreamMixin ],
-		getStateStream: function () {
-			return appStream
-				.filter( function( evnt ){
-					return evnt.type === 'onLoad' && evnt.name === 'weather'
-				} )
-				.map( function ( x ) {
-					console.log('xxxxx', x)
-					return {
-						city: x.data   //x.data.message.value
-					}
-				} )
-		},
 		getInitialState: function(){
 			return { 
 				city: 'london',
@@ -32,6 +19,19 @@ module.exports = function( controlStream, appStream, cityData ){
 			}
 		},
 		componentWillMount: function(){
+
+			appStream
+			.filter( x => x.type === 'onLoad' && x.name === 'weather' )
+			.subscribe( x => {
+				this.setState( { 'city': x.data } )
+			}, err=>{throw err}, ()=>{console.log('cmplt')})
+
+			appStream
+			.filter( x =>  x.type === 'stateChange' && x.name === 'stopped' )
+			.subscribe( () => {
+				this.setState( { start : { isDisabled: false } } )
+				this.setState( { stop : { isDisabled: true } } )
+			}, err=>{throw err}, ()=>{console.log('cmplt')})
 
 			this.changeHandler = FuncSubject.create( x => {
 				const cityValue = x.target.value
@@ -47,14 +47,6 @@ module.exports = function( controlStream, appStream, cityData ){
 			}, err => {throw err}, () => { return 'complete' } )
 
 			this.C = React.createFactory( 'select' )
-			this.cities = React.createElement( 'select', {
-					'defaultValue': this.state.city,
-					onChange: x => this.changeHandler
-				},
-				...cityData.map( ( e ) => {
-						return React.createElement( "option", { value: e[1] }, e[0] )
-					} )
-				)
 
 			this.StartHandler = FuncSubject.create( () => {
 				return {

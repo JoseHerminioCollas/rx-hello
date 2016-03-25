@@ -1,6 +1,5 @@
 /* goatstone.cloud.cloud */
 'use strict'
-const Rx = require( 'rx' )
 const async = require( "async" )
 const weatherRemote = require( 'goatstone/remote/task/weather-remote' )
 const mapRemote = require( 'goatstone/remote/task/map' )
@@ -17,7 +16,7 @@ const cities = [
 	['Helsinki', 'helsinki'],
 	['Tokyo', 'tokyo'],
 	['Cleveland', 'cleveland'],
-	['Chicago', 'Chicagoago']
+	['Chicago', 'chicago']
 ]
 
 function Cloud(){}

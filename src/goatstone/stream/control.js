@@ -9,8 +9,28 @@ const oCBacks = require('goatstone/util/o-call-backs')
 const format = new Format()
 const controlStream = FuncSubject.create()
 const ticker = new Ticker( )
+require( 'babel-polyfill' )
+const cityGen = require( 'goatstone/generator/city' )
 
 module.exports = function ( appStream, cloud ) {
+
+    var cityI = cityGen( cloud.city() )
+    ticker.onTick( x => {
+            const genV = cityI.next()
+            if( genV.done ){ //stop ticker
+                ticker.stop()
+                cityI = cityGen( cloud.city() ) // reset the generator
+                appStream.onNext( { type: 'stateChange', name: 'stopped' } )
+                return
+            }
+            const dataP = {
+                type: 'getData',
+                name: 'weather',
+                data: { city: genV.value }
+            }
+            controlStream.onNext( dataP )
+        }
+    )
 
     // get weather data
     controlStream
@@ -48,15 +68,7 @@ module.exports = function ( appStream, cloud ) {
        .filter( x => x.type === 'control' && x.name === 'start' )
         .subscribe( x => {
 
-            ticker.onTick( x => {
-                    const dataP = {
-                        type: 'getData',
-                        name: 'weather',
-                        data: { city: cloud.city()[ x ][ 1 ] }
-                    }
-                    controlStream.onNext( dataP )  
-                } 
-             )
+
             ticker.start()
 
         }, oCBacks.error, oCBacks.complete )
@@ -69,7 +81,6 @@ module.exports = function ( appStream, cloud ) {
 
     // display al events for debug TODO  remove this debug code
     controlStream.subscribe( x =>{
-        //console.log( 'all events for control - - 3 ', x )
     }, oCBacks.error, oCBacks.complete )
 
     return controlStream
