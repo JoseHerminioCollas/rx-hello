@@ -3,74 +3,9 @@
 <head>
 	<meta charset="utf-8">
 	<title>RxHello</title>
-<style type="text/css">
-body{
-	background-color: #333;	
-	font-family: sans-serif;
-}
-#portal{
-	display: flex;
-	position: absolute;
-	width: 97%;
-	height: 85%;
-}
-#map{
-	border-radius: 13px;
-	width: 70%;
-	min-height: 300px;
-	margin: 12px;
-	transition: opacity 5s;
-	opacity: 0;
-}
-#weather-display {
-	width: 30%;
-}
-#weather-display > div{
-}
-#weather-display div div{
-	background-color: hsla( 200, 50%, 50%, 0.5 );
-	margin: 1px;
-	padding:7px;
-	border-radius: 3px;
-	flex-grow: 1;
-	text-align: right;
-}
-#weather-display em{
-	background-color: hsla( 200, 100%, 60%, 0.7 );
-	border-radius: 3px;
-}
-#control{
-	position: fixed;
-	left: 2%;
-	bottom: 2%;
-}
-/*#control div{*/
-	/*opacity: 0;*/
-/*}*/
-#control button{
-	font-size: 1.0em;
-	margin: 3px;
-	border-radius: 3px;
-	background-color: hsla( 100, 50%, 50%, 0.9 );	
-}
-#control select{
-	font-size: 1.1em;
-	margin: 3px;
-	border-radius: 3px;
-	background-color: hsla( 100, 50%, 50%, 0.9 );	
-}
-#control select: hover{
-	background-color: hsla( 200, 50%, 50%, 0.9 );	
-}
-#message{
-	position: fixed;
-	right: 2%;
-	bottom: 2%;
-}
-</style>
+	<link href="main.css" rel="stylesheet" />
 </head>
 <body>
-
 	<div id="portal">
 		<div id="map"></div>
 		<div id="weather-display"></div>

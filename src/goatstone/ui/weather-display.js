@@ -20,6 +20,14 @@ module.exports = function( appStream ){
 			borderRadius: '13px',
 			width: '100%'
 		},
+		itemStyle: {
+			backgroundColor: 'hsla( 200, 50%, 50%, 0.5 )',
+			margin: '1px',
+			padding: '7px',
+			borderRadius: '3px',
+			flexGrow: 1,
+			textAlign: 'right'
+		},
 		getInitialState: function() {
 		    return {
 				message: 'init message',
@@ -29,13 +37,15 @@ module.exports = function( appStream ){
 			}
 		},
 	 	render:  function() {
-	 		const items = this.state.messageArr.map( function( e, i ){
-	 			return <div key={ i }>
+	 		const items = this.state.messageArr.map( ( e, i ) => {
+	 			return <div key={ i } style={ this.itemStyle } >
 	 				{ e.label }   
 	 				<em> { e.value } </em> 
 	 			</div>
-	 		})
-	 		return <div style={ { opacity: this.state.opacity, ...this.style } }> { items } </div>
+	 		}   )
+	 		return <div style={
+	 			{ opacity: this.state.opacity, ...this.style }
+	 		}> { items } </div>
 	 	}
 	 })  
 }

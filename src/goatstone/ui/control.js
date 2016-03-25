@@ -92,27 +92,45 @@ module.exports = function( controlStream, appStream, cityData  ){
 				{this.City(
 					{
 						'value': this.state.city,
-						onChange: this.ChangeHandler
+						onChange: this.ChangeHandler,
+						style: {
+							fontSize:'1.1em',
+							backgroundColor:'hsla( 100, 10%, 50%, 1.0 )',
+							margin: '3px',
+							borderRadius: '5px'
+						}
 					},
 					...cityData.map( ( e ) => {
 						return React.createElement( "option", { value: e[1] }, e[0] )
 					} )
 
 				)}
-						{
-							this.Start( {
-								disabled: this.state.start.isDisabled,
-								onClick: this.StartHandler
-							},
-								'Start' )
+				{
+					this.Start( {
+						disabled: this.state.start.isDisabled,
+						onClick: this.StartHandler,
+						style: {
+							fontSize:'1.0em',
+							backgroundColor:'hsla( 100, 20%, 80%, 1.0 )',
+							margin: '3px',
+							borderRadius: '7px'
 						}
-						{
-							this.Stop( {
-								disabled: this.state.stop.isDisabled,
-								onClick: this.StopHandler
-							},
-								'Stop' )
+					},
+						'Start' )
+				}
+				{
+					this.Stop( {
+						disabled: this.state.stop.isDisabled,
+						onClick: this.StopHandler,
+						style: {
+							fontSize:'1.0em',
+							backgroundColor:'hsla( 0, 20%, 80%, 1.0 )',
+							margin: '3px',
+							borderRadius: '7px'
 						}
+					},
+						'Stop' )
+				}
 					</div>
 		}
 	})
