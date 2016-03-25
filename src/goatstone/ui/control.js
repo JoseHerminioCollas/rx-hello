@@ -2,9 +2,8 @@
 'use strict'
 const React = require( 'react' )
 const FuncSubject = require('rx-react').FuncSubject
-//var StateStreamMixin = require('rx-react').StateStreamMixin;
 
-module.exports = function( controlStream, appStream, cityData ){
+module.exports = function( controlStream, appStream, cityData  ){
 
 	return React.createClass( {
 		getInitialState: function(){
@@ -33,20 +32,21 @@ module.exports = function( controlStream, appStream, cityData ){
 				this.setState( { stop : { isDisabled: true } } )
 			}, err=>{throw err}, ()=>{console.log('cmplt')})
 
-			this.changeHandler = FuncSubject.create( x => {
+			this.ChangeHandler = FuncSubject.create( x => {
 				const cityValue = x.target.value
 				this.setState( {city: cityValue } )
+				controlStream.onNext( { type:'control', name: 'stop' } )
 				return {
-					name: 'getData',
-					type: 'weather',
+					type: 'getData',
+					name: 'weather',
 					data: { city: cityValue }
 				}
 			})
-			this.changeHandler.subscribe( x =>{
+			this.ChangeHandler.subscribe( x =>{
 				controlStream.onNext( x )
 			}, err => {throw err}, () => { return 'complete' } )
 
-			this.C = React.createFactory( 'select' )
+			this.City = React.createFactory( 'select' )
 
 			this.StartHandler = FuncSubject.create( () => {
 				return {
@@ -78,10 +78,10 @@ module.exports = function( controlStream, appStream, cityData ){
 		render: function() {
 			return 	<div>
 
-				{this.C(
+				{this.City(
 					{
 						'value': this.state.city,
-						onChange: this.changeHandler
+						onChange: this.ChangeHandler
 					},
 					...cityData.map( ( e ) => {
 						return React.createElement( "option", { value: e[1] }, e[0] )

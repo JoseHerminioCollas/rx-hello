@@ -4,8 +4,8 @@ const async = require( "async" )
 const weatherRemote = require( 'goatstone/remote/task/weather-remote' )
 const mapRemote = require( 'goatstone/remote/task/map' )
 const cities = [
-	['New York', 'new-york'],
 	['Seattle', 'seattle'],
+	['New York', 'new-york'],
 	['Los Angeles', 'los-angeles'],
 	['London', 'london' ],
 	['Paris', 'paris'],

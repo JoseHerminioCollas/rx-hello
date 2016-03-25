@@ -3,19 +3,38 @@
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
 const FuncSubject = require('rx-react').FuncSubject 
-const oCBacks = require('goatstone/util/o-call-backs')
+//const oCBacks = require('goatstone/util/o-call-backs')
 const Cloud = require('goatstone/remote/cloud')
 const cloud = new Cloud({owKey: 'abc'})
-
+require( 'babel-polyfill' )
+const cityGen = require( 'goatstone/generator/city' )
+const Ticker = require( 'goatstone/time/ticker' )
+const ticker = new Ticker( )
+var cityI = cityGen( cloud.city() )
 // streams
 const appStream = FuncSubject.create()
-const controlStream = require( 'goatstone/stream/control' )( appStream, cloud )
+const controlStream = require( 'goatstone/stream/control' )( appStream, cloud, ticker )
 // ui
 const Control = require( 'goatstone/ui/control' )( controlStream, appStream, cloud.city() )
 const Message = require( 'goatstone/ui/message-display' )( appStream )
 const WeatherDisplay = require( 'goatstone/ui/weather-display' )( appStream )
 
-require( 'babel-polyfill' ) 
+ticker.onTick( x => {
+		const genV = cityI.next()
+		if( genV.done ){ //stop ticker
+			ticker.stop()
+			cityI = cityGen( cloud.city() ) // reset the generator
+			appStream.onNext( { type: 'stateChange', name: 'stopped' } )
+			return
+		}
+		const dataP = {
+			type: 'getData',
+			name: 'weather',
+			data: { city: genV.value }
+		}
+		controlStream.onNext( dataP )
+	}
+)
 
 window.onload = function() {
 	ReactDOM.render( <WeatherDisplay />, 
@@ -29,7 +48,7 @@ window.onload = function() {
 	{
 		type:'getData',
 		name: 'weather',
-		data: { city: 'London' } // TODO set this on the UI 
+		data: { city: cityI.next().value }
 	}
 	)
 	appStream.onNext( {
@@ -38,4 +57,6 @@ window.onload = function() {
 		data:  
 			{ title:'RxHello', message:'Welcome to RxHello' }		 
 	} )
+
+	document.querySelector('#map').style.opacity = 1.0
 }
