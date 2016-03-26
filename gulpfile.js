@@ -54,6 +54,10 @@ gulp.task('browserifyBundle', function(){
 });
 
 gulp.task('buildHTML', function(){
-    return gulp.src( input.html )         
+    return gulp.src(
+        [
+            './src/goatstone/index.html',
+            './src/goatstone/main.css'
+        ] )
         .pipe(gulp.dest('./dist/'));
 });

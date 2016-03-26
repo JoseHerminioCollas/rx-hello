@@ -2,8 +2,6 @@
 'use strict'
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
-//const FuncSubject = require('rx-react').FuncSubject
-//const oCBacks = require('goatstone/util/o-call-backs')
 const Cloud = require('goatstone/remote/cloud')
 const cloud = new Cloud({owKey: 'abc'})
 require( 'babel-polyfill' )

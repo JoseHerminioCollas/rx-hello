@@ -2,7 +2,26 @@
 const React = require( 'react' )
 
 module.exports = function( appStream ){
-
+	const containerStyle = {
+		backgroundColor: 'gray',
+			transition: 'opacity 3s',
+			display: 'flex',
+			flexWrap: 'wrap',
+			flexDirection: 'column',
+			borderRadius: '13px',
+			width: '100%'
+	}
+	const itemStyle = {
+		backgroundColor: 'hsla( 200, 50%, 50%, 0.5 )',
+			margin: '1px',
+			borderRadius: '3px',
+			flexGrow: 1,
+			textAlign: 'right'
+	}
+	const emStyle = {
+		backgroundColor: 'hsla( 200, 50%, 50%, 1.0 )',
+		padding: '3px'
+	}
 	return React.createClass({
 		componentWillMount: function(){
 
@@ -12,25 +31,24 @@ module.exports = function( appStream ){
 			},err=>{throw err},()=>console.log('cmplt'))
 
 		},
-		style:{
-			backgroundColor: 'gray',
-			transition: 'opacity 3s',
-			display: 'flex',
-			flexWrap: 'wrap',
-			borderRadius: '13px',
-			width: '100%'
-		},
 		getInitialState: function() {
-		    return { message: 'init message', title: 'init title', messageArr: [], opacity:0.0}
+		    return {
+				message: 'init message',
+				title: 'init title',
+				messageArr: [],
+				opacity: 0.0
+			}
 		},
 	 	render:  function() {
-	 		const items = this.state.messageArr.map( function( e, i ){
-	 			return <div key={ i }>
+	 		const items = this.state.messageArr.map( ( e, i ) => {
+	 			return <div key={ i } style={ itemStyle } >
 	 				{ e.label }   
-	 				<em> { e.value } </em> 
+	 				<em style={ emStyle }> { e.value } </em>
 	 			</div>
-	 		})
-	 		return <div style={ { opacity: this.state.opacity, ...this.style } }> { items } </div>
+	 		}   )
+	 		return <div style={
+	 			{ ...containerStyle, opacity: this.state.opacity }
+	 		}> { items } </div>
 	 	}
 	 })  
 }

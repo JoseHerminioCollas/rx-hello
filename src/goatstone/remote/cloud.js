@@ -16,7 +16,20 @@ const cities = [
 	['Helsinki', 'helsinki'],
 	['Tokyo', 'tokyo'],
 	['Cleveland', 'cleveland'],
-	['Chicago', 'chicago']
+	['Chicago', 'chicago'],
+	['Munich', 'munich'],
+	['Humboldt', 'Humboldt'],
+	['Chatham', 'Chatham'],
+	['Urbana', 'Urbana'],
+	['Union', 'Union'],
+	['Crane', 'Crane'],
+	['Tipton', 'Tipton'],
+	['Lagrange', 'Lagrange'],
+	['Kewanee', 'Kewanee'],
+	['Millinocket', 'Millinocket'],
+	['Hobart', 'Hobart'],
+	['Scotchtown', 'Scotchtown'],
+	['Pittsfield', 'Pittsfield']
 ]
 
 function Cloud(){}

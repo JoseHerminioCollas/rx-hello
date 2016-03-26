@@ -4,7 +4,7 @@ var traverse = require('traverse');
 
 // display these items with labels  
 var labels = {
-    'name': 'Name',
+    'name': 'City Name',
     'clouds,all': 'Weather',
 	'coord,lon': 'Longitude',
 	'coord,lat': 'Latitude',
@@ -40,6 +40,6 @@ Format.prototype.JSONtoContentList = function ( jsonObj ){
 	    if (labels[i])
 	        displayContent.push({label: labels[i], value: objElements[i]})
 	}
-	return displayContent
+	return displayContent.reverse()
 }
 module.exports = Format
