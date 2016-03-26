@@ -1,0 +1,37 @@
+body{
+    background-color: #333;
+    font-family: sans-serif;
+}
+#portal{
+    display: flex;
+    position: absolute;
+    width: 97%;
+    height: 85%;
+}
+#map{
+    border-radius: 13px;
+    width: 70%;
+    min-height: 300px;
+    margin: 0 7px;
+    transition: opacity 5s;
+    opacity: 0;
+}
+#weather-display {
+    width: 30%;
+}
+#control{
+    position: fixed;
+    left: 2%;
+    bottom: 2%;
+}
+#control button:hover{
+    cursor: pointer;
+}
+#control select:hover{
+    cursor: pointer;
+}
+#message{
+    position: fixed;
+    right: 2%;
+    bottom: 2%;
+}

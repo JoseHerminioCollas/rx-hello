@@ -34,7 +34,7 @@ gulp.task('build', [ 'browserifyBundle', 'buildHTML' ] );
 gulp.task('webpack', function() {
   return gulp.src('./src/goatstone/index.js')
     .pipe(webpack( require('./webpack.config.js') ))
-    .pipe(gulp.dest('dist/'));
+    .pipe(gulp.dest('./serve/public/'));
 });
 
 gulp.task('browserifyBundle', function(){
@@ -50,7 +50,7 @@ gulp.task('browserifyBundle', function(){
     .pipe( buffer() )
     .pipe( sourcemaps.init({loadMaps: true}) )  
     .pipe( sourcemaps.write('./') )  
-    .pipe( gulp.dest('./dist') );
+    .pipe( gulp.dest('./serve/public/') );
 });
 
 gulp.task('buildHTML', function(){
@@ -59,5 +59,5 @@ gulp.task('buildHTML', function(){
             './src/goatstone/index.html',
             './src/goatstone/main.css'
         ] )
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest('./serve/public/'));
 });
