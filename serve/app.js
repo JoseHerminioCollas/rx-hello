@@ -6,7 +6,7 @@ var config = require('./config')();
 var app = express();
 app.disable('etag');
 
-var host = '192.168.1.141'
+var host = '192.168.0.3'
 var port = 8080
 
 app.use(express.static( __dirname + '/public'));

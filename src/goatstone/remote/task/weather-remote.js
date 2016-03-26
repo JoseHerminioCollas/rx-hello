@@ -1,17 +1,25 @@
-/* goatstone.remote.task.weatherRemote */
+/**
+ * Configure a request to a remote API and return a promise/data
+ * @module goatstone/remote/task/weather-remote 
+ * @namespace goatstone/remote/task/weatherRemote
+ * @property {string} id An OpenWeatherMap key
+ * @property {string} url The URL to use for openweathermap.org
+ * @property {string} q A parameter that will be sent to the server
+ * @property {function} getData Recieves a request object ex { city:'London'} returns a Promise
+ */
 'use strict'
 var config = require( 'goatstone/config' )
 const axios = require( 'axios' )
 
-const wr =  {
+const weatherRemote =  {
 	id: config.openWeatherMapKey,
 	url: 'http://api.openweathermap.org/data/2.5/weather',
 	q: 'London', 
-	getPromise: x => {
-		wr.q = x.city || wr.q
+	getData: function( x ) {
+		this.q = x.city || this.q
 		return axios.get(
-			`${wr.url}?q=${wr.q}&appid=${wr.id}` 
+			`${this.url}?q=${this.q}&appid=${this.id}` 
 			)
 	}
 }
-module.exports = wr
+module.exports = weatherRemote

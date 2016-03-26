@@ -23,7 +23,7 @@ var labels = {
 	'sys,sunset': 'Sun Set' 
 }
 function Format(){}
-/**
+/*
  * Convert a JSON object into a list of values and labels that will be used for display. 
  * @param { JSON Object } jsonObj
  * @return	{ array } displayContent

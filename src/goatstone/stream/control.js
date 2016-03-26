@@ -15,19 +15,9 @@ module.exports = function ( appStream, cloud, ticker ) {
     controlStream
         .filter(x => x.type === 'getData' && x.name === 'weather')
         .flatMap( x => { 
-            /*
-            x.data {object} { city: {string} }
-            cloud.weatherMap()
-            returns { request:{}, returnJSON:{} }
-            */
-            return Rx.Observable.fromPromise( cloud.weatherR( x.data ) )
+            return Rx.Observable.fromPromise( cloud.weatherMap( x.data ) )
         } )
         .subscribe( x => {
-            cloud.map({
-                center:
-                { 
-                    lat:x.res.data.coord.lat, lng: x.res.data.coord.lon
-                }})
             appStream.onNext({
                 type: 'onLoad',
                 name: 'weather',
