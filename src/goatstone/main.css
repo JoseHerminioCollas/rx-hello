@@ -12,7 +12,7 @@ body{
     border-radius: 13px;
     width: 70%;
     min-height: 300px;
-    margin: 12px;
+    margin: 0 7px;
     transition: opacity 5s;
     opacity: 0;
 }

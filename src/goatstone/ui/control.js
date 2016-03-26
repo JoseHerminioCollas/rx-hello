@@ -4,7 +4,31 @@ const React = require( 'react' )
 const FuncSubject = require('rx-react').FuncSubject
 
 module.exports = function( controlStream, appStream, cityData  ){
-
+	const startStyle = {
+		fontSize:'1.0em',
+		backgroundColor:'hsla( 100, 20%, 80%, 1.0 )',
+		margin: '3px',
+		borderRadius: '7px'
+	}
+	const stopStyle = {
+		fontSize:'1.0em',
+		backgroundColor:'hsla( 0, 20%, 80%, 1.0 )',
+		margin: '3px',
+		borderRadius: '7px'
+	}
+	const containerStyle = {
+		fontSize: '1.2em',
+		transition: 'opacity 9s',
+		borderRadius: '13px',
+		backgroundColor: 'hsla( 200, 20%, 50%, 0.9 )',
+		padding: '12px'
+	}
+	const citySelectStyle = {
+		fontSize:'1.1em',
+		backgroundColor:'hsla( 100, 10%, 50%, 1.0 )',
+		margin: '3px',
+		borderRadius: '5px'
+	}
 	return React.createClass( {
 		getInitialState: function(){
 			return {
@@ -18,13 +42,6 @@ module.exports = function( controlStream, appStream, cityData  ){
                 opacity: 0.0
 			}
 		},
-        style: {
-            fontSize: '1.2em',
-            transition: 'opacity 9s',
-            borderRadius: '13px',
-            backgroundColor: 'hsla( 200, 20%, 50%, 0.9 )',
-            padding: '12px'
-        },
 		componentWillMount: function(){
 
 			appStream
@@ -87,18 +104,15 @@ module.exports = function( controlStream, appStream, cityData  ){
 			this.Stop = React.createFactory('button' )
 		},
 		render: function() {
-			return 	<div style={ { opacity: this.state.opacity, ...this.style } } >
+			return 	<div style={
+				{ ...containerStyle, opacity: this.state.opacity }
+			} >
 
 				{this.City(
 					{
 						'value': this.state.city,
 						onChange: this.ChangeHandler,
-						style: {
-							fontSize:'1.1em',
-							backgroundColor:'hsla( 100, 10%, 50%, 1.0 )',
-							margin: '3px',
-							borderRadius: '5px'
-						}
+						style: citySelectStyle
 					},
 					...cityData.map( ( e ) => {
 						return React.createElement( "option", { value: e[1] }, e[0] )
@@ -109,12 +123,7 @@ module.exports = function( controlStream, appStream, cityData  ){
 					this.Start( {
 						disabled: this.state.start.isDisabled,
 						onClick: this.StartHandler,
-						style: {
-							fontSize:'1.0em',
-							backgroundColor:'hsla( 100, 20%, 80%, 1.0 )',
-							margin: '3px',
-							borderRadius: '7px'
-						}
+						style: startStyle
 					},
 						'Start' )
 				}
@@ -122,12 +131,7 @@ module.exports = function( controlStream, appStream, cityData  ){
 					this.Stop( {
 						disabled: this.state.stop.isDisabled,
 						onClick: this.StopHandler,
-						style: {
-							fontSize:'1.0em',
-							backgroundColor:'hsla( 0, 20%, 80%, 1.0 )',
-							margin: '3px',
-							borderRadius: '7px'
-						}
+						style: stopStyle
 					},
 						'Stop' )
 				}

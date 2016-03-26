@@ -2,7 +2,16 @@
 const React = require('react')
 
 module.exports = function ( appStream ) {
-
+    const containerStyle = {
+        fontSize: '2.2em',
+        color: 'hsla( 200, 10%, 20%, 1.0 )',
+        transition: 'opacity 6s',
+        borderRadius: '13px',
+        minWidth: '6em',
+        width: '100%',
+        backgroundColor: 'hsla( 200, 20%, 50%, 0.9 )',
+        padding: '12px'
+    }
     return React.createClass({
 
         componentWillMount: function () {
@@ -21,14 +30,6 @@ module.exports = function ( appStream ) {
                 }, () => console.log('cmplt'))
 
         },
-        style: {
-            fontSize: '1.2em',
-            transition: 'opacity 6s',
-            borderRadius: '13px',
-            width: '100%',
-            backgroundColor: 'hsla( 200, 20%, 50%, 0.9 )',
-            padding: '12px'
-        },
         getInitialState: function () {
             return {
                 message: 'init message',
@@ -37,7 +38,7 @@ module.exports = function ( appStream ) {
             }
         },
         render: function () {
-            return <div style={ { opacity: this.state.opacity, ...this.style } }>
+            return <div style={ { ...containerStyle, opacity: this.state.opacity } }>
                 <h3>{ this.state.title }</h3>
                 { this.state.message }
             </div>
