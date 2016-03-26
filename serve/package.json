@@ -1,0 +1,23 @@
+{
+  "name": "NodeServe",
+  "version": "1.0.0",
+  "description": "A simple server to act as a backend for development",
+  "repository": "",
+  "scripts": {
+    "start": "node app.js",
+    "deploy": "gcloud preview app deploy --version alpha" 
+  },
+  "author": "Jose Collas",
+  "license": "Apache Version 2.0",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "gcloud": "^0.28.0",
+    "kerberos": "^0.0.18",
+    "mongodb": "^2.1.7",
+    "prompt": "^1.0.0"
+  }, 
+  "engines": {
+    "node": ">=0.12.7"
+  }
+}
