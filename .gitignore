@@ -3,3 +3,6 @@ config.js
 .idea/
 node_modules/
 serve/public/
+serve/twitter-config.js
+.dockerignore
+Dockerfile

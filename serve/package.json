@@ -16,7 +16,6 @@
     "kerberos": "^0.0.18",
     "mongodb": "^2.1.7",
     "prompt": "^1.0.0",
-    "twitter-js-client": "0.0.5",
     "twitter-node-client": "0.0.6"
   },
   "engines": {

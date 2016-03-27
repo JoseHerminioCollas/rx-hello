@@ -17,7 +17,7 @@ const Control = require( 'goatstone/ui/control' )( controlStream, appStream, clo
 const Message = require( 'goatstone/ui/message-display' )( appStream )
 const WeatherDisplay = require( 'goatstone/ui/weather-display' )( appStream )
 
-cloud.twitter()
+cloud.twitter( { q: 'dogs' } )
 	.then( data => {
 		console.log( '111', data.data.statuses[0].text )
 	}, err=>{throw err},()=>console.log('cmplt'))

@@ -11,12 +11,12 @@ const axios = require( 'axios' )
 
 const twitterRemote =  {
 	url: '/weather/twitter/',
-	city: 'detroit',
+	q: 'detroit',
 	getData: function( x ) {
 		if (!x || !x.q){ throw 'q value needed' }
-		this.city = x.q || this.q
+		this.q = x.q || this.q
 		return axios.get(
-			`${this.url}?q=${this.q}`
+			`${this.url}${this.q}`
 		)
 	}
 }

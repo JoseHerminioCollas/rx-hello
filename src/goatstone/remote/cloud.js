@@ -65,7 +65,8 @@ Cloud.prototype.map = function( x ){
 Cloud.prototype.city = function(){
 	return cities
 }
-Cloud.prototype.twitter = function( ){
-	return twitterRemote.getData( { q: 'chicago weather' } )
+Cloud.prototype.twitter = function( request ){
+	if (!request || !request.q){ throw 'q value needed' }
+	return twitterRemote.getData( request )
 }
 module.exports = Cloud
