@@ -3,7 +3,7 @@
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )  
 const Cloud = require('goatstone/remote/cloud')
-const cloud = new Cloud({owKey: 'abc'})
+const cloud = new Cloud()
 require( 'babel-polyfill' )
 const cityGen = require( 'goatstone/generator/city' )
 const Ticker = require( 'goatstone/time/ticker' )
@@ -16,6 +16,11 @@ const controlStream = require( 'goatstone/stream/control' )( appStream, cloud, t
 const Control = require( 'goatstone/ui/control' )( controlStream, appStream, cloud.city() )
 const Message = require( 'goatstone/ui/message-display' )( appStream )
 const WeatherDisplay = require( 'goatstone/ui/weather-display' )( appStream )
+
+cloud.twitter()
+	.then( data => {
+		console.log( '111', data.data.statuses[0].text )
+	}, err=>{throw err},()=>console.log('cmplt'))
 
 ticker.onTick( x => {
 		const genV = cityI.next()

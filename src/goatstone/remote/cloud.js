@@ -2,6 +2,7 @@
 'use strict'
 const async = require( "async" )
 const weatherRemote = require( 'goatstone/remote/task/weather-remote' )
+const twitterRemote = require( 'goatstone/remote/task/twitter-remote' )
 const mapRemote = require( 'goatstone/remote/task/map' )
 const cities = [
 	['Seattle', 'seattle'],
@@ -64,9 +65,7 @@ Cloud.prototype.map = function( x ){
 Cloud.prototype.city = function(){
 	return cities
 }
-Cloud.prototype.twitter = function(){
-    return new Promise( function ( resolve, reject ) {
-        resolve( 100 )
-    } )
+Cloud.prototype.twitter = function( ){
+	return twitterRemote.getData( { city: 'chicago' } )
 }
 module.exports = Cloud

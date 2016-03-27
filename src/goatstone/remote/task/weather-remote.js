@@ -5,7 +5,7 @@
  * @property {string} id An OpenWeatherMap key
  * @property {string} url The URL to use for openweathermap.org
  * @property {string} q A parameter that will be sent to the server
- * @property {function} getData Recieves a request object ex { city:'London'} returns a Promise
+ * @property {function} getData Receives a request object ex { city:'London'} returns a Promise
  */
 'use strict'
 var config = require( 'goatstone/config' )
