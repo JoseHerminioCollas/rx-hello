@@ -16,11 +16,7 @@ const controlStream = require( 'goatstone/stream/control' )( appStream, cloud, t
 const Control = require( 'goatstone/ui/control' )( controlStream, appStream, cloud.city() )
 const Message = require( 'goatstone/ui/message-display' )( appStream )
 const WeatherDisplay = require( 'goatstone/ui/weather-display' )( appStream )
-
-cloud.twitter( { q: 'dogs' } )
-	.then( data => {
-		console.log( '111', data.data.statuses[0].text )
-	}, err=>{throw err},()=>console.log('cmplt'))
+const TwitterDisplay = require( 'goatstone/ui/twitter-display' )( appStream )
 
 ticker.onTick( x => {
 		const genV = cityI.next()
@@ -30,16 +26,22 @@ ticker.onTick( x => {
 			appStream.onNext( { type: 'stateChange', name: 'stopped' } )
 			return
 		}
-		const dataP = {
+		controlStream.onNext( {
 			type: 'getData',
 			name: 'weather',
 			data: { city: genV.value }
-		}
-		controlStream.onNext( dataP )
+		} )
+		controlStream.onNext( {
+				type:'getData',
+				name:'twitter',
+				data: { city: genV.value }
+			} )
 	}
 )
 
 window.onload = function() {
+	ReactDOM.render( <TwitterDisplay />, 
+		document.getElementById( 'twitter-display' ) ) 
 	ReactDOM.render( <WeatherDisplay />, 
 		document.getElementById( 'weather-display' ) ) 
 	ReactDOM.render( <Control />, 
@@ -47,11 +49,19 @@ window.onload = function() {
 	ReactDOM.render( <Message />, 
 		document.getElementById( 'message' ) ) 
 
+	const initCity = cityI.next().value
+	controlStream.onNext(
+		{
+			type:'getData',
+			name:'twitter',
+			data: { city: initCity }
+		}
+	)
 	controlStream.onNext(
 	{
 		type:'getData',
 		name: 'weather',
-		data: { city: cityI.next().value }
+		data: { city: initCity }
 	}
 	)
 	appStream.onNext({

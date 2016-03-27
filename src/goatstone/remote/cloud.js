@@ -67,6 +67,7 @@ Cloud.prototype.city = function(){
 }
 Cloud.prototype.twitter = function( request ){
 	if (!request || !request.q){ throw 'q value needed' }
-	return twitterRemote.getData( request )
+	const twitterRequest = { q: 'weather ' + request.q }
+	return twitterRemote.getData( twitterRequest )
 }
 module.exports = Cloud

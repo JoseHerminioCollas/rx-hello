@@ -10,7 +10,23 @@ const controlStream = FuncSubject.create()
 require( 'babel-polyfill' )
 
 module.exports = function ( appStream, cloud, ticker ) {
-
+    // get twitter data
+    controlStream
+        .filter(x => x.type === 'getData' && x.name === 'twitter')
+        .flatMap( x => {
+            if( !x || !x.data || !x.data.city ){ throw 'city data must be passed' }
+            const city = x.data.city
+            return Rx.Observable.fromPromise(
+                cloud.twitter( { q: city } )
+            )
+        } )
+        .subscribe( x => {
+            appStream.onNext( {
+                type: 'onload',
+                name: 'twitter',
+                data: x.data
+            } )
+        }, oCBacks.error, oCBacks.complete )
     // get weather data
     controlStream
         .filter(x => x.type === 'getData' && x.name === 'weather')
