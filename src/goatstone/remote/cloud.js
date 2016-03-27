@@ -66,6 +66,6 @@ Cloud.prototype.city = function(){
 	return cities
 }
 Cloud.prototype.twitter = function( ){
-	return twitterRemote.getData( { city: 'chicago' } )
+	return twitterRemote.getData( { q: 'chicago weather' } )
 }
 module.exports = Cloud
