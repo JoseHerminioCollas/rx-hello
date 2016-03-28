@@ -1,23 +1,27 @@
 /** goatstone/ui/twitter-display */
-
-/* goatstone.ui.MessageDisplay  */
 const React = require('react')
 
 module.exports = function ( appStream ) {
     const containerStyle = {
-        color: 'hsla( 200, 10%, 20%, 1.0 )',
-        transition: 'opacity 2s',
-        borderRadius: '13px',
-        backgroundColor: 'hsla( 200, 20%, 50%, 0.5 )',
-        padding: '6px'
+      color: 'hsla( 200, 10%, 20%, 1.0 )',
+      transition: 'opacity 2s',
+      padding: '6px'
     }
     const articleStyle = {
         fontSize: '0.9em',
-        padding: '7px',
-        margin: '7px',
-        borderRadius: '7px',
+        padding: '6px',
+        margin: '1px 0px',
+        borderRadius: '3px',
         color: 'hsla( 100, 50%, 10%, 1.0 )',
         background: 'hsla( 200, 90%, 90%, 1.0 )'
+    }
+    const titleStyle = {
+      fontSize: '1.0em',
+      color: 'hsla( 200, 40%, 90%, 1.0 )',
+      borderRadius: '3px',
+      backgroundColor: 'hsla( 200, 20%, 50%, 0.9 )',
+      padding: '12px',
+      margin: 0
     }
     return React.createClass({
         componentWillMount: function () {
@@ -34,7 +38,7 @@ module.exports = function ( appStream ) {
         getInitialState: function () {
             return {
                 message: '',
-                title: 'Twitter Feed',
+                title: 'Twitter Feed for the city name and the term "weather"',
                 opacity: 0.0,
                 tweets: []
             }
@@ -46,7 +50,7 @@ module.exports = function ( appStream ) {
                         </article>
             } )
             return  <div style={ { ...containerStyle, opacity: this.state.opacity } }>
-                    <h4>{ this.state.title }</h4>
+                    <h4 style={ titleStyle }>{ this.state.title }</h4>
                         { items }
                     </div>
         }
