@@ -1,0 +1,7 @@
+deploy:
+  provider: gae
+  project: goatstone-rx-hello
+before_install:
+- openssl aes-256-cbc -K $encrypted_aac2368bef40_key -iv $encrypted_aac2368bef40_iv
+  -in goatstone-rx-hello-0ddd3416d697.json.enc -out goatstone-rx-hello-0ddd3416d697.json
+  -d

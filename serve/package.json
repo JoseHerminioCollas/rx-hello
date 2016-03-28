@@ -5,7 +5,7 @@
   "repository": "",
   "scripts": {
     "start": "node app.js",
-    "deploy": "gcloud preview app deploy --version alpha" 
+    "deploy": "gcloud preview app deploy --version alpha"
   },
   "author": "Jose Collas",
   "license": "Apache Version 2.0",
@@ -15,8 +15,9 @@
     "gcloud": "^0.28.0",
     "kerberos": "^0.0.18",
     "mongodb": "^2.1.7",
-    "prompt": "^1.0.0"
-  }, 
+    "prompt": "^1.0.0",
+    "twitter-node-client": "0.0.6"
+  },
   "engines": {
     "node": ">=0.12.7"
   }

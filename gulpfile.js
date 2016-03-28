@@ -1,13 +1,9 @@
 /* gulpfile.js */
 var
-
   react = require('gulp-react'),  
   // mocha = require('gulp-mocha'),
-
-  concat = require('gulp-concat'), 
-  source = require('vinyl-source-stream'),  
+  source = require('vinyl-source-stream'),
   buffer = require('vinyl-buffer'),
-  sourcemaps = require('gulp-sourcemaps'),
   babelify = require('babelify'),
   gulp  = require('gulp'),
   gutil = require('gulp-util'),
@@ -15,8 +11,8 @@ var
   sourcemaps = require('gulp-sourcemaps'),
   browserify = require('browserify'),
   reactify = require('reactify'),
-  streamify = require('gulp-streamify');
-var webpack = require('webpack-stream');
+  streamify = require('gulp-streamify'),
+  webpack = require('webpack-stream')
 
 var input  = {
   'javascript': 'src/goatstone/**/**/*.js',
@@ -29,13 +25,13 @@ gulp.task('watch', function() {
   gulp.watch(input.javascript, [  'build' ] );  
 });
 
-gulp.task('build', [ 'browserifyBundle', 'buildHTML' ] );
+gulp.task('build', [ 'buildHTML', 'buildCSS', 'browserifyBundle' ] );
 
-gulp.task('webpack', function() {
-  return gulp.src('./src/goatstone/index.js')
-    .pipe(webpack( require('./webpack.config.js') ))
-    .pipe(gulp.dest('./serve/public/'));
-});
+//gulp.task('webpack', function() {
+//  return gulp.src('./src/goatstone/index.js')
+//    .pipe(webpack( require('./webpack.config.js') ))
+//    .pipe(gulp.dest('./serve/public/'));
+//});
 
 gulp.task('browserifyBundle', function(){
   return browserify( {
@@ -50,14 +46,20 @@ gulp.task('browserifyBundle', function(){
     .pipe( buffer() )
     .pipe( sourcemaps.init({loadMaps: true}) )  
     .pipe( sourcemaps.write('./') )  
-    .pipe( gulp.dest('./serve/public/') );
+    .pipe( gulp.dest('./serve/public/js') );
 });
 
 gulp.task('buildHTML', function(){
     return gulp.src(
         [
-            './src/goatstone/index.html',
+            './src/goatstone/index.html'
+        ] )
+        .pipe(gulp.dest('./serve/public'));
+});
+gulp.task('buildCSS', function(){
+    return gulp.src(
+        [
             './src/goatstone/main.css'
         ] )
-        .pipe(gulp.dest('./serve/public/'));
+        .pipe(gulp.dest('./serve/public/css'));
 });
