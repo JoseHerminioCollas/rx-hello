@@ -3,7 +3,7 @@
 
 const FuncSubject = require('rx-react').FuncSubject
 const appStream = FuncSubject.create()
-const devMode = true;
+const devMode = false;
 
 appStream.subscribe( x => {
 

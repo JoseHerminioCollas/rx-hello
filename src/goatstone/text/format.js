@@ -31,6 +31,7 @@ Format.prototype.JSONtoContentList = function ( jsonObj ){
 	        objElements[this.path] = e
 	    }
 	})
+  // iterate through labels, sort labels, create displayContent
   // generate the content for display
 	var displayContent = []
 	for (var i in objElements) {
@@ -41,8 +42,7 @@ Format.prototype.JSONtoContentList = function ( jsonObj ){
               value: function(){
                 if( i  === 'sys,sunset' || i === 'sys,sunrise' ) {
                     const dateValueFormatted = (
-                      new Date( objElements[i] * 1000 ).getHours() + ':' +
-                      new Date().toString( objElements[i] * 1000 ).substr(16, 8)
+                      new Date( objElements[i] * 1000 ).toString().substr( 16, 5 )
                      )
                     return dateValueFormatted
                 }
@@ -51,6 +51,10 @@ Format.prototype.JSONtoContentList = function ( jsonObj ){
             }
           )
 	}
-	return displayContent.reverse()
+  // rearange some elements
+  const firstItem = displayContent.splice( 2, 1 )
+  const secondItem = displayContent.splice( -1 )
+  const cItem = displayContent.concat( firstItem, secondItem )
+	return cItem.reverse()
 }
 module.exports = Format

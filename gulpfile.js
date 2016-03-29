@@ -1,6 +1,6 @@
 /* gulpfile.js */
 var
-  react = require('gulp-react'),  
+  react = require('gulp-react'),
   // mocha = require('gulp-mocha'),
   source = require('vinyl-source-stream'),
   buffer = require('vinyl-buffer'),
@@ -22,7 +22,7 @@ var input  = {
 gulp.task('default', ['build', 'watch' ]);
 
 gulp.task('watch', function() {
-  gulp.watch(input.javascript, [  'build' ] );  
+  gulp.watch(input.javascript, [  'build' ] );
 });
 
 gulp.task('build', [ 'buildHTML', 'buildCSS', 'browserifyBundle' ] );
@@ -44,8 +44,8 @@ gulp.task('browserifyBundle', function(){
     .on('error', gutil.log.bind(gutil, 'Browserify Error') )
     .pipe( source('bundle.js') )
     .pipe( buffer() )
-    .pipe( sourcemaps.init({loadMaps: true}) )  
-    .pipe( sourcemaps.write('./') )  
+    .pipe( sourcemaps.init({loadMaps: true}) )
+    .pipe( sourcemaps.write('./') )
     .pipe( gulp.dest('./serve/public/js') );
 });
 
@@ -54,7 +54,7 @@ gulp.task('buildHTML', function(){
         [
             './src/goatstone/index.html'
         ] )
-        .pipe(gulp.dest('./serve/public'));
+        .pipe(gulp.dest('./serve/'));
 });
 gulp.task('buildCSS', function(){
     return gulp.src(

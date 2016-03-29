@@ -25,7 +25,7 @@ body{
 }
 #control{
     position: fixed;
-    left: 2%;
+    left: 5px;
     bottom: 2%;
 }
 #control button:hover{
@@ -38,4 +38,9 @@ body{
     position: fixed;
     right: 2%;
     bottom: 2%;
+}
+#title-header{
+  position: fixed;
+  bottom: 2px;
+  left: 40%;
 }
