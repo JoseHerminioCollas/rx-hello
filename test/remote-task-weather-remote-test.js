@@ -6,7 +6,7 @@ const weatherRemote = require( 'goatstone/remote/task/weather-remote' )
 describe( 'Weather Remote Data', x => {
 	var json
 	beforeEach( (done) => {
-		weatherRemote.getPromise()
+		weatherRemote.getData( { city: 'london' } )
 		.then ( x => {
 		 	json = x.data
 			done()			

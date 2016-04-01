@@ -16,6 +16,7 @@ const weatherRemote =  {
 	url: 'http://api.openweathermap.org/data/2.5/weather',
 	q: 'London',
 	getData: function( x ) {
+		if ( !x || !x.city ) throw 'Argument with city value is required'
 		this.q = x.city || this.q
 		return axios.get(
 			`${this.url}?units=metric&q=${this.q}&appid=${this.id}` 

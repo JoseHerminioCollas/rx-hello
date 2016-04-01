@@ -71,7 +71,12 @@ module.exports = function( controlStream, appStream, cityData  ){
 				}
 			})
 			this.ChangeHandler.subscribe( x =>{
-				controlStream.onNext( x )
+				controlStream.onNext( {
+						type:'getData',
+						name:'twitter',
+						data: { city: x.data.city }
+					} )
+					controlStream.onNext( x )
 			}, err => {throw err}, () => { return 'complete' } )
 
 			this.City = React.createFactory( 'select' )

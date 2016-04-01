@@ -13,6 +13,7 @@ var cityI = cityGen( cloud.city() )
 const appStream = require( 'goatstone/stream/application' )
 const controlStream = require( 'goatstone/stream/control' )( appStream, cloud, ticker )
 // ui
+const appStyle = require( 'goatstone/ui/style/main' )
 const Control = require( 'goatstone/ui/control' )( controlStream, appStream, cloud.city() )
 const Message = require( 'goatstone/ui/message-display' )( appStream )
 const WeatherDisplay = require( 'goatstone/ui/weather-display' )( appStream )
@@ -47,7 +48,7 @@ window.onload = function() {
 		document.getElementById( 'weather-display' ) )
 	ReactDOM.render( <Control />,
 		document.getElementById( 'control' ) )
-	ReactDOM.render( <Message />,
+	ReactDOM.render( <Message style={ appStyle.messageDisplay } />,
 		document.getElementById( 'message' ) )
 	ReactDOM.render( <TitleHeader />,
 		document.getElementById( 'title-header' )

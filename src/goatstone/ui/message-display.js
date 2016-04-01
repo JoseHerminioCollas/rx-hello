@@ -2,16 +2,6 @@
 const React = require('react')
 
 module.exports = function ( appStream ) {
-    const containerStyle = {
-        fontSize: '2.0em',
-        color: 'hsla( 200, 10%, 10%, 1.0 )',
-        transition: 'opacity 6s',
-        borderRadius: '7px',
-        minWidth: '6em',
-        width: '100%',
-        backgroundColor: 'hsla( 200, 20%, 50%, 0.9 )',
-        padding: '10px'
-    }
     return React.createClass ( {
         componentWillMount: function () {
             appStream
@@ -33,7 +23,8 @@ module.exports = function ( appStream ) {
             }
         },
         render: function () {
-            return <div style={ { ...containerStyle, opacity: this.state.opacity } }>
+            const style = this.props.style
+            return <div style={ { ...style.containerStyle, opacity: this.state.opacity } }>
                 { this.state.message }
             </div>
         }
