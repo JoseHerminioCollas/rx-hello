@@ -1,54 +1,33 @@
 /* goatstone.ui.WeatherDisplay  */
+'use strict'
 const React = require( 'react' )
 
 module.exports = function( appStream ){
-	const containerStyle = {
-		backgroundColor: 'gray',
-			transition: 'opacity 3s',
-			display: 'flex',
-			flexWrap: 'wrap',
-			flexDirection: 'column',
-			borderRadius: '13px',
-			width: '100%'
-	}
-	const itemStyle = {
-		backgroundColor: 'hsla( 200, 50%, 50%, 0.5 )',
-			margin: '1px',
-			borderRadius: '3px',
-			flexGrow: 1,
-			textAlign: 'right'
-	}
-	const emStyle = {
-		backgroundColor: 'hsla( 200, 50%, 50%, 1.0 )',
-		padding: '3px'
-	}
 	return React.createClass({
 		componentWillMount: function(){
-
 			appStream.filter( x => x.type === 'content' )
 			.subscribe( x => {
 				this.setState( { messageArr: x.data, opacity: 1.0 } )
-			},err=>{throw err},()=>console.log('cmplt'))
+			},err => { throw err }, () => console.log('cmplt') )
 
 		},
 		getInitialState: function() {
 		    return {
-				message: 'init message',
-				title: 'init title',
 				messageArr: [],
 				opacity: 0.0
 			}
 		},
-	 	render:  function() {
+	 	render: function() {
+	 		const S = this.props.style
 	 		const items = this.state.messageArr.map( ( e, i ) => {
-	 			return <div key={ i } style={ itemStyle } >
-	 				{ e.label }   
-	 				<em style={ emStyle }> { e.value } </em>
-	 			</div>
-	 		}   )
-	 		return <div style={
-	 			{ ...containerStyle, opacity: this.state.opacity }
-	 		}> { items } </div>
-	 	}
-	 })  
+	 			return <section key={ i } style={ S.item } >
+	 				{ e.label }
+	 				<em style={ S.em }> { e.value } </em>
+	 			</section>
+	 		} )
+	 		return 	<div style={ { ...S.container, opacity: this.state.style } } >
+					 	<h4 style={ S.title }> { this.props.title } </h4>
+						{ items }
+					</div>
+	 	}	} )
 }

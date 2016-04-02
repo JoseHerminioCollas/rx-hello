@@ -1,7 +1,7 @@
 /* goatstone.index   */
 'use strict'
 const React = require( 'react' )
-const ReactDOM = require( 'react-dom' )  
+const ReactDOM = require( 'react-dom' )
 const Cloud = require('goatstone/remote/cloud')
 const cloud = new Cloud()
 require( 'babel-polyfill' )
@@ -13,10 +13,12 @@ var cityI = cityGen( cloud.city() )
 const appStream = require( 'goatstone/stream/application' )
 const controlStream = require( 'goatstone/stream/control' )( appStream, cloud, ticker )
 // ui
+const appStyle = require( 'goatstone/ui/style/main' )
 const Control = require( 'goatstone/ui/control' )( controlStream, appStream, cloud.city() )
 const Message = require( 'goatstone/ui/message-display' )( appStream )
 const WeatherDisplay = require( 'goatstone/ui/weather-display' )( appStream )
 const TwitterDisplay = require( 'goatstone/ui/twitter-display' )( appStream )
+const TitleHeader = require( 'goatstone/ui/title-header' )( appStream )
 
 ticker.onTick( x => {
 		const genV = cityI.next()
@@ -40,15 +42,24 @@ ticker.onTick( x => {
 )
 
 window.onload = function() {
-	ReactDOM.render( <TwitterDisplay />, 
-		document.getElementById( 'twitter-display' ) ) 
-	ReactDOM.render( <WeatherDisplay />, 
-		document.getElementById( 'weather-display' ) ) 
-	ReactDOM.render( <Control />, 
-		document.getElementById( 'control' ) ) 
-	ReactDOM.render( <Message />, 
-		document.getElementById( 'message' ) ) 
-
+	ReactDOM.render( <TwitterDisplay
+		style={ appStyle.twitterDisplay } />,
+		document.getElementById( 'twitter-display' ) )
+	ReactDOM.render( 
+		<WeatherDisplay 
+		title={ 'OpenWeatherMap.org Feed' } 
+		style={ appStyle.weatherDisplay } />,
+		document.getElementById( 'weather-display' ) )
+	ReactDOM.render( <Control
+		style={ appStyle.control }  />,
+		document.getElementById( 'control' ) )
+	ReactDOM.render( <Message
+		style={ appStyle.messageDisplay } />,
+		document.getElementById( 'message' ) )
+	ReactDOM.render( <TitleHeader
+		style={ appStyle.titleHeader }  />,
+		document.getElementById( 'title-header' )
+	)
 	const initCity = cityI.next().value
 	controlStream.onNext(
 		{

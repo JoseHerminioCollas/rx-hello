@@ -1,4 +1,5 @@
-/* goatstone.ui.MessageDisplay */
+/* goatstone.ui.TitleHeader  */
+'use strict'
 const React = require('react')
 
 module.exports = function ( appStream ) {
@@ -14,7 +15,7 @@ module.exports = function ( appStream ) {
                         })
                 }, err => {
                     throw err
-                }, () => console.log('cmplt') )
+                }, () => console.log( 'cmplt' ) )
         },
         getInitialState: function () {
             return {
@@ -25,7 +26,12 @@ module.exports = function ( appStream ) {
         render: function () {
             const style = this.props.style
             return <div style={ { ...style.container, opacity: this.state.opacity } }>
-                { this.state.message }
+                <a style={ style.link } href="//goatstone.com" target="new1">
+                  Goatstone
+                </a> :
+                <a style={ style.link } href="https://github.com/JoseHerminioCollas/rx-hello" target="new2">
+                  &nbsp;Weather
+                </a>
             </div>
         }
     } )

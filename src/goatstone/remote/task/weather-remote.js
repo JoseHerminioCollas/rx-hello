@@ -1,6 +1,6 @@
 /**
  * Configure a request to a remote API and return a promise/data
- * @module goatstone/remote/task/weather-remote 
+ * @module goatstone/remote/task/weather-remote
  * @namespace goatstone/remote/task/weatherRemote
  * @property {string} id An OpenWeatherMap key
  * @property {string} url The URL to use for openweathermap.org
@@ -14,11 +14,12 @@ const axios = require( 'axios' )
 const weatherRemote =  {
 	id: config.openWeatherMapKey,
 	url: 'http://api.openweathermap.org/data/2.5/weather',
-	q: 'London', 
+	q: 'London',
 	getData: function( x ) {
+		if ( !x || !x.city ) throw 'Argument with city value is required'
 		this.q = x.city || this.q
 		return axios.get(
-			`${this.url}?q=${this.q}&appid=${this.id}` 
+			`${this.url}?units=metric&q=${this.q}&appid=${this.id}` 
 			)
 	}
 }
