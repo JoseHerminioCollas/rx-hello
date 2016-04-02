@@ -42,15 +42,22 @@ ticker.onTick( x => {
 )
 
 window.onload = function() {
-	ReactDOM.render( <TwitterDisplay />,
+	ReactDOM.render( <TwitterDisplay
+		style={ appStyle.twitterDisplay } />,
 		document.getElementById( 'twitter-display' ) )
-	ReactDOM.render( <WeatherDisplay />,
+	ReactDOM.render( 
+		<WeatherDisplay 
+		title={ 'OpenWeatherMap.org Feed' } 
+		style={ appStyle.weatherDisplay } />,
 		document.getElementById( 'weather-display' ) )
-	ReactDOM.render( <Control />,
+	ReactDOM.render( <Control
+		style={ appStyle.control }  />,
 		document.getElementById( 'control' ) )
-	ReactDOM.render( <Message style={ appStyle.messageDisplay } />,
+	ReactDOM.render( <Message
+		style={ appStyle.messageDisplay } />,
 		document.getElementById( 'message' ) )
-	ReactDOM.render( <TitleHeader />,
+	ReactDOM.render( <TitleHeader
+		style={ appStyle.titleHeader }  />,
 		document.getElementById( 'title-header' )
 	)
 	const initCity = cityI.next().value

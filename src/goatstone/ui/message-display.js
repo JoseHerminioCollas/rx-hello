@@ -24,7 +24,7 @@ module.exports = function ( appStream ) {
         },
         render: function () {
             const style = this.props.style
-            return <div style={ { ...style.containerStyle, opacity: this.state.opacity } }>
+            return <div style={ { ...style.container, opacity: this.state.opacity } }>
                 { this.state.message }
             </div>
         }
