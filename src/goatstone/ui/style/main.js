@@ -1,5 +1,6 @@
-/* goatstone.ui.style.main */
-'use strict'
+/**  Store CSS properties to be used inline in UI components
+ * @module goatstone/ui/style/main
+ * */
 
 module.exports = {
     control: {

@@ -1,7 +1,6 @@
 /**
  * Configure a request to a remote API and return a promise/data
  * @module goatstone/remote/task/weather-remote
- * @namespace goatstone/remote/task/weatherRemote
  * @property {string} id An OpenWeatherMap key
  * @property {string} url The URL to use for openweathermap.org
  * @property {string} q A parameter that will be sent to the server

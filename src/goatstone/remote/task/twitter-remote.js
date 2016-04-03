@@ -1,7 +1,6 @@
 /**
  * Configure a request to the local server api /weather/twitter, returns a promise/data
  * @module goatstone/remote/task/twitter-remote
- * @namespace goatstone/remote/task/twitterRemote
  * @property {string} url The URL to use for the local API server
  * @property {string} q A parameter that will be sent to the server
  * @property {function} getData Receives a request object ex { q:'London weather'} returns a Promise
