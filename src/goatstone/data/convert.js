@@ -40,11 +40,11 @@ Convert.prototype.listToDisplayList = function( flatDataIn, displayConfig ){
         if (displayConfig[i])
             displayContent.push(
                 {
-                    label: displayConfig[i],
+                    label: displayConfig[ i ],
                     value: function(){
                         if( i  === 'sys,sunset' || i === 'sys,sunrise' ) {
                             const dateValueFormatted = (
-                                new Date( objElements[i] * 1000 ).toString().substr( 16, 5 )
+                                new Date( flatDataIn[i] * 1000 ).toString().substr( 16, 5 )
                             )
                             return dateValueFormatted
                         }
@@ -55,5 +55,8 @@ Convert.prototype.listToDisplayList = function( flatDataIn, displayConfig ){
     }
     return displayContent
 }
-
+Convert.prototype.JSONtoContentList = function( JSON ){
+    const flatMap = this.flattenJSON( JSON )
+    return this.listToDisplayList( flatMap, displayConfig )
+}
 module.exports = Convert
