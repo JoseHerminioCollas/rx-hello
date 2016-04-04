@@ -7,13 +7,15 @@ const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )
 const Cloud = require('goatstone/remote/cloud')
 const Ticker = require( 'goatstone/time/ticker' )
+const StreamEvent = require( 'goatstone/stream/event' )
 
+const streamEvent = new StreamEvent()
 const cloud = new Cloud()
 const ticker = new Ticker( )
 var cityIter = require( 'goatstone/generator/inter-index' )( cloud.city() )
 // streams
 const appStream = require( 'goatstone/stream/application' )
-const controlStream = require( 'goatstone/stream/control' )( appStream, cloud, ticker )
+const controlStream = require( 'goatstone/stream/control' )( appStream, cloud, ticker, streamEvent )
 // ui
 const appStyle = require( 'goatstone/ui/style/main' )
 const Control = require( 'goatstone/ui/control' )
@@ -39,6 +41,7 @@ window.onload = function() {
 		style={ appStyle.control }
 		appStream={ appStream }
 		controlStream={ controlStream }
+		streamEvent={ streamEvent }
 		cityData={ cloud.city() }	/>,
 		document.getElementById( 'control' ) )
 	ReactDOM.render( <Message
@@ -51,20 +54,15 @@ window.onload = function() {
 		document.getElementById( 'title-header' )
 	)
 
-	controlStream.onNext( {
-			type:'getData',
-			name:'twitter',
-			data: { city: initCity }
-	} )
-	controlStream.onNext( {
-		type:'getData',
-		name: 'weather',
-		data: { city: initCity }
-	} )
-	appStream.onNext({
-			type: 'stateChange',
-			name: 'loaded'
-	} )
+	controlStream.onNext(
+		streamEvent.create('getData', 'twitter', { city: initCity } )
+	)
+	controlStream.onNext(
+		streamEvent.create('getData', 'weather', { city: initCity } )
+	)
+	appStream.onNext(
+		streamEvent.create('stateChange', 'loaded' )
+ 	)
 
 	// direct DOM manipulation to achieve the fade in effect for Google Maps
 	document.querySelector( '#map' ).style.opacity = 1.0
@@ -74,19 +72,15 @@ window.onload = function() {
 			if( genV.done ){ //stop ticker
 				ticker.stop()
 				cityIter = require( 'goatstone/generator/inter-index' )( cloud.city() ) // reset the generator
-				appStream.onNext( { type: 'stateChange', name: 'stopped' } )
+				appStream.onNext( streamEvent.create( 'stateChange', 'stopped' ) )
 				return
 			}
-			controlStream.onNext( {
-				type: 'getData',
-				name: 'weather',
-				data: { city: genV.value }
-			} )
-			controlStream.onNext( {
-					type:'getData',
-					name:'twitter',
-					data: { city: genV.value }
-				} )
+			controlStream.onNext(
+				streamEvent.create('getData', 'weather', { city: genV.value } )
+ 			)
+			controlStream.onNext(
+				streamEvent.create('getData', 'twitter', { city: genV.value } )
+			)
 		}
 	)
 

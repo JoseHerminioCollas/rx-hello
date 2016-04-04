@@ -5,30 +5,22 @@
 const React = require( 'react' )
 const FuncSubject = require('rx-react').FuncSubject
 
-const StartStop = React.createClass(
-{
+const StartStop = React.createClass( {
   componentWillMount: function(){
-
     this.props.appStream
       .filter( x =>  x.type === 'stateChange' && x.name === 'stopped' )
       .subscribe( () => {
           this.setState(
-            { isPlaying: false }
-          )
-          this.setState( { stop : { isDisabled: true } } )
+            { isPlaying: false } )
       }, err=>{throw err}, ()=>{console.log('cmplt')})
-
     this.clickHandler = FuncSubject.create( () => {
       this.setState( { isPlaying: !this.state.isPlaying } )
       const eventName = this.state.isPlaying ? 'stop' : 'start'
-      return {
-        name: eventName,
-        type: 'control'
-      }
+      return this.props.streamEvent.create( 'command', eventName )
     } )
-    this.clickHandler.subscribe( x => {
-      this.props.controlStream.onNext( x )
-    }, err=>{throw err}, ()=>console.log('complete') )
+    this.clickHandler.subscribe( streamEvent => {
+      this.props.controlStream.onNext( streamEvent )
+      }, err=>{throw err}, ()=>console.log('complete') )
 
   },
   getDefaultProps: function(){

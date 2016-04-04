@@ -1,15 +1,19 @@
 /** An object that creates events for reactive streams
  * @module goatstone/stream/event
 */
+const Log = require( 'goatstone/log/log' )
+
 function Event() {}
 Event.configure = {}
 Event.configure.validEvents = [
   { type: 'command',
-    names: [ 'start', 'stop', 'getData' ] },
+    names: [ 'start', 'stop' ] },
   { type: 'stateChange',
-    names: [ 'started', 'stopped', 'loaded', 'map-loaded', 'twitter-loaded', 'weather-loaded' ] },
+    names: [ 'started', 'stopped', 'loaded', 'mapLoaded', 'twitterLoaded', 'weatherLoaded' ] },
   { type: 'message',
-    names: [ 'system', 'user', 'all' ] }
+    names: [ 'system', 'user', 'all' ] },
+  { type: 'getData',
+    names: [ 'twitter', 'weather' ] }
 ]
 Event.getTypes = function(){
   const types = Event.configure.validEvents.reduce( ( pre, curr, currI, arr ) => {
@@ -48,6 +52,8 @@ Event.prototype.create = function( type, name, data ){
   if( data ){
     Object.assign( eventObj, { data } )
   }
+  // log the event
+  Log.debug( 'event being created', eventObj )
   return eventObj
 }
 module.exports = Event

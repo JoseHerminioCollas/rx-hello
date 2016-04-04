@@ -9,7 +9,7 @@ const format = new Format()
 const controlStream = FuncSubject.create()
 require( 'babel-polyfill' )
 
-module.exports = function ( appStream, cloud, ticker ) {
+module.exports = function ( appStream, cloud, ticker, streamEvent ) {
     // get twitter data
     controlStream
         .filter(x => x.type === 'getData' && x.name === 'twitter')
@@ -21,45 +21,42 @@ module.exports = function ( appStream, cloud, ticker ) {
             )
         } )
         .subscribe( x => {
-            appStream.onNext( {
-                type: 'onload',
-                name: 'twitter',
-                data: x.data
-            } )
+            appStream.onNext( streamEvent.create( 'stateChange', 'twitterLoaded', x.data )
+          )
         }, oCBacks.error, oCBacks.complete )
     // get weather data
     controlStream
         .filter(x => x.type === 'getData' && x.name === 'weather')
-        .flatMap( x => { 
+        .flatMap( x => {
             return Rx.Observable.fromPromise( cloud.weatherMap( x.data ) )
         } )
         .subscribe( x => {
-            appStream.onNext({
-                type: 'onLoad',
-                name: 'weather',
-                data: x.req.city
-            })
-            appStream.onNext({
-                type: 'message',
-                data: {message: x.res.data.name }
-            })
-            appStream.onNext({
-                type: 'content',
-                data: format.JSONtoContentList( x.res.data )
-            })
+            appStream.onNext(
+              streamEvent.create( 'stateChange', 'weatherLoaded',
+              {
+                cityKey: x.req.city,
+                contentList: format.JSONtoContentList( x.res.data ) } )
+            )
+            appStream.onNext(
+              streamEvent.create( 'message', 'user',
+              {
+                message: x.res.data.name } )
+            )
         }, oCBacks.error, oCBacks.complete )
-    // control the state, start     
+    // control the state, start
     controlStream
-       .filter( x => x.type === 'control' && x.name === 'start' )
+       .filter( x => x.type === 'command' && x.name === 'start' )
         .subscribe( x => {
             ticker.start()
         }, oCBacks.error, oCBacks.complete )
     // control the state, stop it
     controlStream
-       .filter( x => x.type === 'control' && x.name === 'stop' )
+       .filter( x => x.type === 'command' && x.name === 'stop' )
         .subscribe( x => {
             ticker.stop()
-            appStream.onNext( { type: 'stateChange', name: 'stopped' } )
+            appStream.onNext(
+              streamEvent.create( 'stateChange', 'stopped' )
+            )
         }, oCBacks.error, oCBacks.complete )
     // display al events for debug TODO  remove this debug code
     controlStream.subscribe( x =>{

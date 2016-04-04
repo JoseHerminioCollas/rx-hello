@@ -13,9 +13,9 @@ module.exports = React.createClass( {
 	},
 	componentWillMount: function(){
 		this.props.appStream
-      .filter( x => x.type === 'onLoad' && x.name === 'weather' )
+      .filter( x => x.type === 'stateChange' && x.name === 'loaded' )
       .subscribe( x => {
-          this.setState( { 'city': x.data, opacity: 1.0  } )
+          this.setState( { opacity: 1.0  } )
       }, err=>{throw err}, ()=>{console.log('cmplt')})
 	},
 	render: function() {
@@ -26,12 +26,16 @@ module.exports = React.createClass( {
 							<StartStop
 								style={ CSS.start }
 								appStream={ this.props.appStream }
-								controlStream={ this.props.controlStream } />
+								controlStream={ this.props.controlStream }
+								streamEvent={ this.props.streamEvent }
+								/>
 							<CitySelect
 								cityData={ this.props.cityData }
 								style={ CSS.citySelect }
 								appStream={ this.props.appStream }
-								controlStream={ this.props.controlStream } />
+								controlStream={ this.props.controlStream }
+								streamEvent={ this.props.streamEvent }
+								/>
 
 						</div>
 	}

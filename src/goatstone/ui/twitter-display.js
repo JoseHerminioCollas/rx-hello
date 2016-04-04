@@ -5,7 +5,7 @@ const React = require('react')
 module.exports = React.createClass({
     componentWillMount: function () {
         this.props.appStream
-            .filter( x => x.type === 'onload' && x.name === 'twitter' )
+            .filter( x => x.type === 'stateChange' && x.name === 'twitterLoaded' )
             .subscribe(x => {
                 this.setState(
                     {
