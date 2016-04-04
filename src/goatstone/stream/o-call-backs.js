@@ -1,4 +1,4 @@
-/* goatstone.util.o-call-back */
+/* goatstone.stream.o-call-back */
 'use strict'
 
 module.exports = {

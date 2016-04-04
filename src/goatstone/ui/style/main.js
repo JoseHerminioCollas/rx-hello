@@ -1,5 +1,6 @@
-/* goatstone.ui.style.main */
-'use strict'
+/**  Store CSS properties to be used inline in UI components
+ * @module goatstone/ui/style/main
+ * */
 
 module.exports = {
     control: {
@@ -17,7 +18,7 @@ module.exports = {
         },
         container: {
             fontSize: '1.2em',
-            transition: 'opacity 9s',
+            transition: 'opacity 0s',
             borderRadius: '13px',
             backgroundColor: 'hsla( 200, 20%, 50%, 0.9 )',
             padding: '12px'

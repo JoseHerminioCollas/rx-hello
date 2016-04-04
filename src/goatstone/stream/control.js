@@ -2,9 +2,9 @@
 'use strict'
 const Rx = require('rx')
 const FuncSubject = require('rx-react').FuncSubject
-const Format = require('goatstone/text/format')
+const Format = require('goatstone/data/convert')
 
-const oCBacks = require('goatstone/util/o-call-backs')
+const oCBacks = require('goatstone/stream/o-call-backs')
 const format = new Format()
 const controlStream = FuncSubject.create()
 require( 'babel-polyfill' )
