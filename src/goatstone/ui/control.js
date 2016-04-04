@@ -2,6 +2,7 @@
 'use strict'
 const React = require( 'react' )
 const FuncSubject = require('rx-react').FuncSubject
+const StartStop = require( 'goatstone/ui/start-stop' )
 
 module.exports = function( controlStream, appStream, cityData  ){
 
@@ -9,32 +10,16 @@ module.exports = function( controlStream, appStream, cityData  ){
 		getInitialState: function(){
 			return {
 				city: 'london',
-				start: {
-					isDisabled: false
-				},
-				stop: {
-					isDisabled: true
-				},
-                opacity: 0.0
+        opacity: 0.0
 			}
 		},
 		componentWillMount: function(){
 
 			appStream
-                .filter( x => x.type === 'onLoad' && x.name === 'weather' )
-                .subscribe( x => {
-                    this.setState( { 'city': x.data, opacity: 1.0  } )
-                }, err=>{throw err}, ()=>{console.log('cmplt')})
-
-			appStream
-                .filter( x =>  x.type === 'stateChange' && x.name === 'stopped' )
-                .subscribe( () => {
-                    this.setState( {
-                        start : { isDisabled: false },
-                        stop : { isDisabled: true }
-                    } )
-                    this.setState( { stop : { isDisabled: true } } )
-                }, err=>{throw err}, ()=>{console.log('cmplt')})
+	      .filter( x => x.type === 'onLoad' && x.name === 'weather' )
+	      .subscribe( x => {
+	          this.setState( { 'city': x.data, opacity: 1.0  } )
+	      }, err=>{throw err}, ()=>{console.log('cmplt')})
 
 			this.ChangeHandler = FuncSubject.create( x => {
 				const cityValue = x.target.value
@@ -57,40 +42,14 @@ module.exports = function( controlStream, appStream, cityData  ){
 
 			this.City = React.createFactory( 'select' )
 
-			this.StartHandler = FuncSubject.create( () => {
-				return {
-					name: 'start',
-					type: 'control'
-				}
-			} )
-			this.StartHandler.subscribe( x => {
-				this.setState( { start: { isDisabled: true } } )
-				this.setState( { stop: { isDisabled: false } } )
-				controlStream.onNext( x )
-			}, err=>{throw err}, ()=>console.log('complete') )
-
-			this.StopHandler = FuncSubject.create( () => {
-				return {
-					name: 'stop',
-					type: 'control'
-				}
-			} )
-			this.StopHandler.subscribe( x => {
-				this.setState( { stop: { isDisabled: true } } )
-				this.setState( { start: { isDisabled: false } } )
-				controlStream.onNext( x )
-			}, err=>{throw err}, ()=>console.log('complete') )
-
-			this.Start = React.createFactory('button')
-			this.Stop = React.createFactory('button' )
 		},
 		render: function() {
 
 			const CSS = this.props.style
 
 			return 	<div style={
-				{ ...CSS.container, opacity: this.state.opacity }
-			} >
+				{ ...CSS.container, opacity: this.state.opacity } } >
+				<StartStop style={ CSS.start } appStream={ appStream } controlStream={ controlStream }/>
 
 				{this.City(
 					{
@@ -103,22 +62,6 @@ module.exports = function( controlStream, appStream, cityData  ){
 					} )
 
 				)}
-				{
-					this.Start( {
-						disabled: this.state.start.isDisabled,
-						onClick: this.StartHandler,
-						style: CSS.start
-					},
-						'Start' )
-				}
-				{
-					this.Stop( {
-						disabled: this.state.stop.isDisabled,
-						onClick: this.StopHandler,
-						style: CSS.stop
-					},
-						'Stop' )
-				}
 					</div>
 		}
 	})

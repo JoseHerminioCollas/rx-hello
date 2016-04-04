@@ -24,7 +24,7 @@ ticker.onTick( x => {
 		const genV = cityI.next()
 		if( genV.done ){ //stop ticker
 			ticker.stop()
-			cityI = cityGen( cloud.city() ) // reset the generator
+			cityI = require( 'goatstone/generator/inter-index' )( cloud.city() ) // reset the generator
 			appStream.onNext( { type: 'stateChange', name: 'stopped' } )
 			return
 		}
@@ -45,9 +45,9 @@ window.onload = function() {
 	ReactDOM.render( <TwitterDisplay
 		style={ appStyle.twitterDisplay } />,
 		document.getElementById( 'twitter-display' ) )
-	ReactDOM.render( 
-		<WeatherDisplay 
-		title={ 'OpenWeatherMap.org Feed' } 
+	ReactDOM.render(
+		<WeatherDisplay
+		title={ 'OpenWeatherMap.org Feed' }
 		style={ appStyle.weatherDisplay } />,
 		document.getElementById( 'weather-display' ) )
 	ReactDOM.render( <Control
