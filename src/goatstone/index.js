@@ -1,14 +1,14 @@
 /* goatstone.index   */
 'use strict'
+require( 'babel-polyfill' )
 const React = require( 'react' )
 const ReactDOM = require( 'react-dom' )
 const Cloud = require('goatstone/remote/cloud')
-const cloud = new Cloud()
-require( 'babel-polyfill' )
-const cityGen = require( 'goatstone/generator/city' )
 const Ticker = require( 'goatstone/time/ticker' )
+
+const cloud = new Cloud()
 const ticker = new Ticker( )
-var cityI = cityGen( cloud.city() )
+var cityI = require( 'goatstone/generator/inter-index' )( cloud.city() )
 // streams
 const appStream = require( 'goatstone/stream/application' )
 const controlStream = require( 'goatstone/stream/control' )( appStream, cloud, ticker )
