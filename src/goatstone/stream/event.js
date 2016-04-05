@@ -3,8 +3,15 @@
 */
 const Log = require( 'goatstone/log/log' )
 
+/** @constructor */
 function Event() {}
+/** Store configuration settings
+ * @static
+*/
 Event.configure = {}
+/** Set the valid events
+ * @static
+*/
 Event.configure.validEvents = [
   { type: 'command',
     names: [ 'start', 'stop' ] },
@@ -15,13 +22,21 @@ Event.configure.validEvents = [
   { type: 'getData',
     names: [ 'twitter', 'weather' ] }
 ]
+/** Get a list of the valid event types
+ * @static
+*/
 Event.getTypes = function(){
   const types = Event.configure.validEvents.reduce( ( pre, curr, currI, arr ) => {
     return pre.concat( curr.type )
   }, [] )
   return types
 }
+/** Get a list of valid names
+ * @static
+ * @param { string } type Get the valid names for a particular type
+*/
 Event.getNames = function( type ){
+  if ( !type ) throw 'A type argument is required.'
   const names = Event.configure.validEvents.reduce( ( pre, curr, currI, arr ) => {
     if(type === curr.type){
       return pre.concat( curr.names )
@@ -30,6 +45,12 @@ Event.getNames = function( type ){
   }, [] )
   return names
 }
+/** Create a valid event base on supplied agruments
+ * @param { string } type The type of event to be created
+ * @param { string } name The name of the event to be created
+ * @param { array } data The optional parameter to set additional parameters
+ * @return { object } eventObj A valid object to be sent with a stream
+*/
 Event.prototype.create = function( type, name, data ){
 
   if( !type || typeof type !== 'string' ){
