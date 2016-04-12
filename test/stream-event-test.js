@@ -2,7 +2,7 @@
 */
 const expect = require( 'chai' ).expect
 const StreamEvent = require( 'goatstone/stream/event' )
-const streamEvent = new StreamEvent
+const streamEvent = new StreamEvent()
 const event = streamEvent.create('stateChange', 'stopped')
 
 describe('Stream Event Generator', () => {

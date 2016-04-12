@@ -1,12 +1,16 @@
-/* goatstone.ui.WeatherDisplay  */
+/** Display information about the weather
+ * @module goatstone/ui/weather-display/WeatherDisplay  
+ */
 'use strict'
 const React = require( 'react' )
 
 module.exports = React.createClass({
 	componentWillMount: function(){
-		this.props.appStream.filter( x => x.type === 'content' )
+
+		this.props.appStream//.filter( x => x.type === 'content' )
+		.filter( x => x.type === 'stateChange' && x.name === 'weatherLoaded' )
 		.subscribe( x => {
-			this.setState( { messageArr: x.data, opacity: 1.0 } )
+			this.setState( { messageArr: x.data.contentList, opacity: 1.0 } )
 		},err => { throw err }, () => console.log('cmplt') )
 
 	},
