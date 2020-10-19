@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^1.5.2",
-    "axios": "^0.9.1",
+    "axios": "^0.20.0",
     "google-maps": "^3.2.1",
     "googlemaps": "^1.4.0",
     "oauth": "^0.9.14",
