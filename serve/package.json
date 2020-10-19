@@ -14,7 +14,7 @@
     "express": "^4.13.4",
     "gcloud": "^0.28.0",
     "kerberos": "^0.0.18",
-    "mongodb": "^2.1.7",
+    "mongodb": "^3.6.2",
     "prompt": "^1.0.0",
     "twitter-node-client": "0.0.6"
   },
